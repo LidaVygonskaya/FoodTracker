@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="@string/fridge"
+        android:icon="@drawable/ic_kitchen_black_24dp"/>
+
+    <item
+        android:title="@string/shopping_list"
+        android:icon="@drawable/ic_format_list_bulleted_black_24dp"/>
+
+    <item
+        android:title="@string/receipies"
+        android:icon="@drawable/ic_room_service_black_24dp"/>
+
+    <item
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings_black_24dp"/>
+
+</menu>

@@ -2,7 +2,9 @@ package com.example.lida.foodtracker.Retrofit;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable{
     @SerializedName("bar_code")
     private String barCode;
 
@@ -14,6 +16,11 @@ public class Product {
 
     @SerializedName("composition")
     private String composition;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 
     public String getBarCode() {
         return barCode;
@@ -46,4 +53,5 @@ public class Product {
     public void setComposition(String composition) {
         this.composition = composition;
     }
+
 }

@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -31,6 +32,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,10 +45,12 @@ import retrofit2.Response;
 public class CameraScanActivity extends AppCompatActivity {
     private SurfaceView cameraView;
     private ListView barcodeInfo;
+    private Button buttonSave;
     private BarcodeDetector barcodeDetector;
 
     private ArrayAdapter<String> arrayAdapter;
-    private List<String> productList = new ArrayList<String>();
+    private List<String> productList;
+    private List<Product> products;
     private static final String TAG = "CAMERA_SCAN_ACTIVITY";
     private ProgressDialog progressDialog;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -60,7 +64,14 @@ public class CameraScanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_scan);
-        productList.add("Начните сканировать и добавлять продукт");
+        buttonSave = (Button) findViewById(R.id.button_save);
+        buttonSave.setOnClickListener(saveListener);
+
+        products = new ArrayList<Product>();
+
+        productList = new ArrayList<String>();
+        productList.add(getString(R.string.add_product_start));
+
         barcodeInfo = (ListView) findViewById(R.id.barcodeTextView);
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productList);
 
@@ -70,7 +81,7 @@ public class CameraScanActivity extends AppCompatActivity {
                 .build();
         myCameraSource = new CameraSource.Builder(this, barcodeDetector)
                 .setAutoFocusEnabled(true)
-                .setRequestedPreviewSize(640, 480)
+                //.setRequestedPreviewSize(640, 480)
                 .build();
 
         myCamera = getCameraInstance();
@@ -131,8 +142,9 @@ public class CameraScanActivity extends AppCompatActivity {
                             //productList.add(thisBarcode.rawValue);
                             //arrayAdapter.notifyDataSetChanged();
                             barcodes.clear();
-                            getProductInformation("1234567890123");
+                            getProductInformation(thisBarcode.rawValue);
                             //setResult(RESULT_OK, intent);
+
                             //finish();
 
                         }
@@ -172,9 +184,11 @@ public class CameraScanActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 productList.add(product.getName());
+                                products.add(product);
                                 arrayAdapter.notifyDataSetChanged();
                                 dialog.dismiss();
                                 isAbleToScan = true;
+                                checkButtonVisibility();
                             }
                         })
                         .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
@@ -225,6 +239,8 @@ public class CameraScanActivity extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == MY_CAMERA_REQUEST_CODE) {
@@ -249,6 +265,26 @@ public class CameraScanActivity extends AppCompatActivity {
         }
         return c; // returns null if camera is unavailable
     }
+
+    public void checkButtonVisibility() {
+        if (buttonSave.getVisibility() == View.INVISIBLE && !productList.isEmpty()) {
+            buttonSave.setVisibility(View.VISIBLE);
+        } else {
+            buttonSave.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    View.OnClickListener saveListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("BARCODES_LIST", (Serializable) products);//Список продуктов
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    };
 
     @Override
     protected void onPause() {

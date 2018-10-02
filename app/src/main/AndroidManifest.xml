@@ -27,7 +27,11 @@
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
         <!-- To use multiple models: android:value="barcode,model2,model3" -->
-        <activity android:name=".SpacesActivity"></activity>
+        <activity android:name=".SpacesActivity" />
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

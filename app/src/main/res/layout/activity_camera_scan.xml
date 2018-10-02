@@ -1,19 +1,37 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/AppTheme.NoActionBar"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <FrameLayout
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
-        android:layout_height="600dp">
+        app:layout_heightPercent="30%"
+        android:scaleType="centerCrop">
     </FrameLayout>
+
+    <Button
+        android:text="@string/button_save"
+        android:id="@+id/button_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/camera_view"
+        android:visibility="invisible"
+        >
+
+    </Button>
 
     <ListView
         android:id="@+id/barcodeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/camera_view">
+        android:layout_below="@id/button_save"
+
+        >
+
     </ListView>
 
-</RelativeLayout>
+</android.support.percent.PercentRelativeLayout>

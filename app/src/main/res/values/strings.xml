@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">FoodTracker</string>
+    <string name="fridge">Холодильник</string>
+    <string name="shopping_list">Список покупок</string>
+    <string name="receipies">Рецепты</string>
+    <string name="settings">Настройки</string>
+    <string name="button_save">Добавить в холодильник</string>
+    <string name="add_product_start">Начните сканировать продукты</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
 </resources>
