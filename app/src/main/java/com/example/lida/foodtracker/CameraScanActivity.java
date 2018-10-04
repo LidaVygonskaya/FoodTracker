@@ -20,9 +20,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.lida.foodtracker.Retrofit.App;
 import com.example.lida.foodtracker.Retrofit.Product;
@@ -47,6 +49,8 @@ public class CameraScanActivity extends AppCompatActivity {
     private ListView barcodeInfo;
     private Button buttonSave;
     private BarcodeDetector barcodeDetector;
+    private Toolbar toolbar;
+    private ImageButton exitButton;
 
     private ArrayAdapter<String> arrayAdapter;
     private List<String> productList;
@@ -66,6 +70,9 @@ public class CameraScanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera_scan);
         buttonSave = (Button) findViewById(R.id.button_save);
         buttonSave.setOnClickListener(saveListener);
+
+        exitButton = (ImageButton) findViewById(R.id.exit);
+        exitButton.setOnClickListener(exitListener);
 
         products = new ArrayList<Product>();
 
@@ -161,53 +168,70 @@ public class CameraScanActivity extends AppCompatActivity {
         Map<String, String> data = new HashMap<>();
         data.put("bar", barcode);
         Call<Product> call = App.getApi().getProduct(data);
+
+
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
                 Log.d(TAG, response.toString());
-                final Product product = response.body();
+
+                if (response.code() == 200) {
+                    final Product product = response.body();
 
 
-                final LayoutInflater inflater = getLayoutInflater();
-                final View chooseAmountDialogView = inflater.inflate(R.layout.choose_amount_dialog, null);
-                //NumberPicker
-                final NumberPicker numberPicker = (NumberPicker) chooseAmountDialogView.findViewById(R.id.dialog_number_picker);
-                numberPicker.setMaxValue(100);
-                numberPicker.setMinValue(1);
-                numberPicker.setWrapSelectorWheel(false);
+                    final LayoutInflater inflater = getLayoutInflater();
+                    final View chooseAmountDialogView = inflater.inflate(R.layout.choose_amount_dialog, null);
+                    //NumberPicker
+                    final NumberPicker numberPicker = (NumberPicker) chooseAmountDialogView.findViewById(R.id.dialog_number_picker);
+                    numberPicker.setMaxValue(100);
+                    numberPicker.setMinValue(1);
+                    numberPicker.setWrapSelectorWheel(false);
 
-                //Да нет? Alert dialog
-                AlertDialog alertDialog = new AlertDialog.Builder(CameraScanActivity.this)
-                        .setTitle("Выберите количество")
-                        .setMessage(product.getName())
-                        .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                productList.add(product.getName());
-                                products.add(product);
-                                arrayAdapter.notifyDataSetChanged();
-                                dialog.dismiss();
-                                isAbleToScan = true;
-                                checkButtonVisibility();
-                            }
-                        })
-                        .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                isAbleToScan = true;
-                            }
-                        })
-                        .setView(chooseAmountDialogView)
-                        .create();
-                alertDialog.show();
+                    //Да нет? Alert dialog
+                    AlertDialog alertDialog = new AlertDialog.Builder(CameraScanActivity.this)
+                            .setTitle("Выберите количество")
+                            .setMessage(product.getName())
+                            .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    productList.add(product.getName());
+                                    products.add(product);
+                                    arrayAdapter.notifyDataSetChanged();
+                                    dialog.dismiss();
+                                    isAbleToScan = true;
+                                    checkButtonVisibility();
+                                }
+                            })
+                            .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    isAbleToScan = true;
+                                }
+                            })
+                            .setView(chooseAmountDialogView)
+                            .create();
+                    alertDialog.show();
 
+                } else {
+                    AlertDialog alertDialog = new AlertDialog.Builder(CameraScanActivity.this)
+                            .setTitle("Не можем найти такой продукт")
+                            .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    isAbleToScan = true;
+                                }
+                            })
+                            .create();
+
+                    alertDialog.show();
+                }
             }
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
                 Log.d(TAG, "Failed response");
-
             }
         });
 
@@ -218,7 +242,7 @@ public class CameraScanActivity extends AppCompatActivity {
     private void requestCameraPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             new AlertDialog.Builder(this)
-                    .setTitle("Permittion Needed")
+                    .setTitle("Необходимо разрешение")
                     .setMessage("Дайте доступ к камере, чтобы мы смогли считывать штрих-код продуктов")
                     .setPositiveButton("Разрешить", new DialogInterface.OnClickListener() {
                         @Override
@@ -269,7 +293,7 @@ public class CameraScanActivity extends AppCompatActivity {
     public void checkButtonVisibility() {
         if (buttonSave.getVisibility() == View.INVISIBLE && !productList.isEmpty()) {
             buttonSave.setVisibility(View.VISIBLE);
-        } else {
+        } else if (productList.isEmpty()) {
             buttonSave.setVisibility(View.INVISIBLE);
         }
     }
@@ -282,6 +306,13 @@ public class CameraScanActivity extends AppCompatActivity {
             bundle.putSerializable("BARCODES_LIST", (Serializable) products);//Список продуктов
             intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
+            finish();
+        }
+    };
+
+    View.OnClickListener exitListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
             finish();
         }
     };
