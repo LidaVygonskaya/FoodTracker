@@ -2,10 +2,13 @@ package com.example.lida.foodtracker;
 
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -24,12 +27,16 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> productAdapter;
     private List<String> productNames;
     private Toolbar toolbar;
+    private BottomNavigationView bottomNavigationView;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(bottomListener);
 
         productNames = new ArrayList<String>();
         productAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productNames);
@@ -71,6 +78,31 @@ public class MainActivity extends AppCompatActivity {
         //toast.setGravity(Gravity.CENTER, 0, 0);
         //toast.show();
     }
+
+    BottomNavigationView.OnNavigationItemSelectedListener bottomListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Intent intent;
+            switch (item.getItemId()) {
+                case R.id.fridge_button:
+                    intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    return true;
+
+                case R.id.shopping_list:
+                    intent = new Intent(getApplicationContext(), ShoppingList.class);
+                    startActivity(intent);
+                    return true;
+
+                case R.id.recepieces:
+                    return true;
+
+                case R.id.settings:
+                    return true;
+            }
+            return false;
+        }
+    };
 
 
 }

@@ -9,5 +9,6 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="my_fridges">Мои холодильники</string>
     <string name="CameraScanActivity">Добавить продукт</string>
+    <string name="enter_product_name">Введите имя продукта</string>
 
 </resources>
