@@ -74,8 +74,8 @@ public class MainActivity extends BaseActivity {
             return;
         }
         Bundle bundle = data.getExtras();
-        ArrayList<Product> reslutList = (ArrayList<Product>)bundle.getSerializable("BARCODES_LIST");
-        for (Product p:reslutList) {
+        ArrayList<Product> resultList = (ArrayList<Product>)bundle.getSerializable("BARCODES_LIST");
+        for (Product p:resultList) {
             productNames.add(p.getName());
         }
         productAdapter.notifyDataSetChanged();
