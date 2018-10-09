@@ -20,14 +20,23 @@ import com.example.lida.foodtracker.Retrofit.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private ImageButton addProductButton;
     private ListView productList;
     private ArrayAdapter<String> productAdapter;
     private List<String> productNames;
     private Toolbar toolbar;
-    private BottomNavigationView bottomNavigationView;
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.fridge;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -35,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(bottomListener);
+        bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(this);
 
         productNames = new ArrayList<String>();
         productAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productNames);
@@ -45,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         productList = (ListView) findViewById(R.id.productList);
         productList.setAdapter(productAdapter);
         productList.setEmptyView(findViewById(R.id.empty));
@@ -53,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         addProductButton = (ImageButton) findViewById(R.id.add_product);
         addProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            //Intent for result Camera Scan
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CameraScanActivity.class);
                 startActivityForResult(intent, 1);
@@ -63,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
         if (data == null) {
             return;
         }
@@ -74,35 +80,6 @@ public class MainActivity extends AppCompatActivity {
         }
         productAdapter.notifyDataSetChanged();
         Log.d("a", "as");
-        //Toast toast = Toast.makeText(getApplicationContext(), barcode, Toast.LENGTH_SHORT);
-        //toast.setGravity(Gravity.CENTER, 0, 0);
-        //toast.show();
     }
-
-    BottomNavigationView.OnNavigationItemSelectedListener bottomListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Intent intent;
-            switch (item.getItemId()) {
-                case R.id.fridge_button:
-                    intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
-                    return true;
-
-                case R.id.shopping_list:
-                    intent = new Intent(getApplicationContext(), ShoppingList.class);
-                    startActivity(intent);
-                    return true;
-
-                case R.id.recepieces:
-                    return true;
-
-                case R.id.settings:
-                    return true;
-            }
-            return false;
-        }
-    };
-
 
 }

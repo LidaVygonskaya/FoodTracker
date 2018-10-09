@@ -2,6 +2,7 @@ package com.example.lida.foodtracker;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +16,19 @@ import com.example.lida.foodtracker.Utils.ListViewItemWithCheckBoxAdapter;
 
 import java.util.ArrayList;
 
-public class ShoppingList extends AppCompatActivity {
+
+public class ShoppingListActivity extends BaseActivity {
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_shopping_list;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.shopping_list;
+    }
+
     ImageButton addProduct;
     ImageButton clearText;
     EditText addProductText;
@@ -28,13 +41,15 @@ public class ShoppingList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_list);
 
+        bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(this);
+
         products = new ArrayList<String>();
 
         productList = (ListView) findViewById(R.id.product_list);
         adapter = new ListViewItemWithCheckBoxAdapter(getApplicationContext(), products);
         productList.setAdapter(adapter);
         productList.setEmptyView(findViewById(R.id.empty));
-
 
         addProduct = (ImageButton) findViewById(R.id.done_button);
         addProduct.setOnClickListener(addProductListener);
