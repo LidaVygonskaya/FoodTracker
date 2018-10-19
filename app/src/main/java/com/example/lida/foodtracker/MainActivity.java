@@ -52,11 +52,11 @@ public class MainActivity extends BaseActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         productList = (ListView) findViewById(R.id.productList);
         productList.setAdapter(productAdapter);
-        productList.setEmptyView(findViewById(R.id.empty));
+        productList.setEmptyView(findViewById(R.id.empty_group));
 
         addProductButton = (ImageButton) findViewById(R.id.add_product);
         addProductButton.setOnClickListener(new View.OnClickListener() {

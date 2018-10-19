@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -88,9 +89,10 @@ public class CameraScanActivity extends AppCompatActivity {
                 .build();
         myCameraSource = new CameraSource.Builder(this, barcodeDetector)
                 .setAutoFocusEnabled(true)
-                //.setRequestedPreviewSize(640, 480)
                 .build();
+        requestCameraPermission();
 
+/*
         myCamera = getCameraInstance();
         myParameters = myCamera.getParameters();
         myPreview = new CameraPreview(this, myCamera, myCameraSource, myParameters);
@@ -98,68 +100,7 @@ public class CameraScanActivity extends AppCompatActivity {
         preview.addView(myPreview);
 
 
-/*
-        cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
-
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                try {
-                    if (ContextCompat.checkSelfPermission(CameraScanActivity.this,
-                            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(CameraScanActivity.this, "You have this permission", Toast.LENGTH_LONG).show();
-                    } else {
-                        requestCameraPermission();
-                    }
-                    cameraSource.start(cameraView.getHolder());
-                } catch (IOException e) {
-                    Log.d(TAG, "Cant start CameraSource");
-                    e.printStackTrace();
-                }
-            }
-
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                cameraSource.stop();
-            }
-        });*/
-
-        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-            @Override
-            public void release() {
-            }
-
-            @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
-                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
-                if (barcodes.size() != 0 && isAbleToScan) {
-                    barcodeInfo.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            isAbleToScan = false;
-                            Barcode thisBarcode = (Barcode) barcodes.valueAt(0);
-                            Log.d(TAG, thisBarcode.rawValue);
-                            //Intent intent = new Intent();
-                            //intent.putExtra("barcode", thisBarcode.rawValue);
-                            //productList.add(thisBarcode.rawValue);
-                            //arrayAdapter.notifyDataSetChanged();
-                            barcodes.clear();
-                            getProductInformation(thisBarcode.rawValue);
-                            //setResult(RESULT_OK, intent);
-
-                            //finish();
-
-                        }
-                    });
-                }
-            }
-
-        });
+        barcodeDetector.setProcessor(barcodeProcessor);*/
     }
 
     public void getProductInformation(final String barcode) {
@@ -267,25 +208,43 @@ public class CameraScanActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d(TAG, "adad");
         if (requestCode == MY_CAMERA_REQUEST_CODE) {
+            Log.d(TAG, "adad");
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permission GRANDED", Toast.LENGTH_SHORT).show();
+                myCamera = getCameraInstance();
+                myParameters = myCamera.getParameters();
+                myPreview = new CameraPreview(this, myCamera, myCameraSource, myParameters);
+                FrameLayout preview = (FrameLayout) findViewById(R.id.camera_view);
+                preview.addView(myPreview);
+                barcodeDetector.setProcessor(barcodeProcessor);
+
             } else {
                 Toast.makeText(this, "Permission was not GRANDED", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onrequestpermmsion");
+
             }
+            return;
         }
     }
 
     //Can try to request camera permissions here
-    public static Camera getCameraInstance(){
+    public Camera getCameraInstance(){
         Camera c = null;
         Camera.Parameters p = null;
         try {
+            if (ContextCompat.checkSelfPermission(CameraScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(CameraScanActivity.this, "You have this permission", Toast.LENGTH_LONG).show();
+            } else {
+                requestCameraPermission();
+            }
             c = Camera.open(); // attempt to get a Camera instance
             p = c.getParameters();
         }
         catch (Exception e){
             // Camera is not available (in use or does not exist)
+            Log.d(TAG, "not abvi");
         }
         return c; // returns null if camera is unavailable
     }
@@ -297,6 +256,39 @@ public class CameraScanActivity extends AppCompatActivity {
             buttonSave.setVisibility(View.INVISIBLE);
         }
     }
+
+    Detector.Processor<Barcode> barcodeProcessor = new Detector.Processor<Barcode>() {
+        @Override
+        public void release() {
+
+        }
+
+        @Override
+        public void receiveDetections(Detector.Detections<Barcode> detections) {
+            final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+            if (barcodes.size() != 0 && isAbleToScan) {
+                barcodeInfo.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        isAbleToScan = false;
+                        Barcode thisBarcode = (Barcode) barcodes.valueAt(0);
+                        Log.d(TAG, thisBarcode.rawValue);
+                        //Intent intent = new Intent();
+                        //intent.putExtra("barcode", thisBarcode.rawValue);
+                        //productList.add(thisBarcode.rawValue);
+                        //arrayAdapter.notifyDataSetChanged();
+                        barcodes.clear();
+                        getProductInformation(thisBarcode.rawValue);
+                        //setResult(RESULT_OK, intent);
+
+                        //finish();
+
+                    }
+                });
+            }
+        }
+
+    };
 
     View.OnClickListener saveListener = new View.OnClickListener() {
         @Override
@@ -326,17 +318,24 @@ public class CameraScanActivity extends AppCompatActivity {
         //myCameraSource.stop();
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     protected void onResume() {
         super.onResume();
-        if (myPreview == null) {
+        /*if (myPreview == null) {
+
             try {
-                myCameraSource.start(myPreview.getHolder());
+                if (ContextCompat.checkSelfPermission(CameraScanActivity.this,
+                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(CameraScanActivity.this, "You have this permission", Toast.LENGTH_LONG).show();
+                    myCameraSource.start(myPreview.getHolder());
+                } else {
+                    requestCameraPermission();
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
     }
 }

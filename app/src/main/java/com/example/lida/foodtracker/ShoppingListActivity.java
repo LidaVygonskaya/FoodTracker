@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -49,7 +50,7 @@ public class ShoppingListActivity extends BaseActivity {
 
     private EditText shoppingListText;
     private LayoutInflater inflater;
-    private ImageButton addShoppingListButton;
+    private FloatingActionButton addShoppingListButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +62,15 @@ public class ShoppingListActivity extends BaseActivity {
 
         inflater = ShoppingListActivity.this.getLayoutInflater();
 
-        shoppingList = (ListView) findViewById(R.id.shopping_list);
-        shoppingList.setEmptyView(findViewById(R.id.empty));
+        shoppingList = (ListView) findViewById(R.id.shopp_list);
+        shoppingList.setEmptyView(findViewById(R.id.empty_group));
 
         productList = new ArrayList<String>() ;
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, productList);
         shoppingList.setAdapter(adapter);
 
-        addShoppingListButton = (ImageButton) findViewById(R.id.add_shoppig_list);
+        addShoppingListButton = (FloatingActionButton) findViewById(R.id.add_shopping_list);
         addShoppingListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
