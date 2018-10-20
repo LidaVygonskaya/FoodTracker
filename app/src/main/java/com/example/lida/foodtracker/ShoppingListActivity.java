@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -77,10 +78,12 @@ public class ShoppingListActivity extends BaseActivity {
                 v = inflater.inflate(R.layout.add_shopping_list, null);
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(ShoppingListActivity.this);
 
-                mBuilder.setTitle("Что купить?");
+                mBuilder.setTitle("Вводи продукты :)");
+                mBuilder.setMessage("Можешь вводить товары через запятую или на новой строке");
                 mBuilder.setView(v);
 
                 shoppingListText = (EditText)v.findViewById(R.id.add_shoppig_list_text);
+                hideKeyboard(v);
 
                 mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                     @Override
@@ -105,10 +108,19 @@ public class ShoppingListActivity extends BaseActivity {
                     }
                 });
 
-                mBuilder.show();
+                AlertDialog dialog = mBuilder.create();
+
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+                dialog.show();
             }
         });
 
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 }
