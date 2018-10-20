@@ -2,7 +2,9 @@ package com.example.lida.foodtracker;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,15 +20,18 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.lida.foodtracker.Retrofit.App;
 import com.example.lida.foodtracker.Retrofit.Product;
@@ -38,6 +43,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,13 +53,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CameraScanActivity extends AppCompatActivity {
-    private SurfaceView cameraView;
     private ListView barcodeInfo;
     private Button buttonSave;
     private TextView buttonSaveEmpty;
     private BarcodeDetector barcodeDetector;
-    private Toolbar toolbar;
     private ImageButton exitButton;
+    private Button manualInput;
 
     private ArrayAdapter<String> arrayAdapter;
     private List<String> productList;
@@ -96,6 +101,56 @@ public class CameraScanActivity extends AppCompatActivity {
                 .build();
         requestCameraPermission();
 
+        manualInput = (Button) findViewById(R.id.manual_input);
+        manualInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final LayoutInflater inflater = CameraScanActivity.this.getLayoutInflater();
+                v = inflater.inflate(R.layout.add_product, null);
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(CameraScanActivity.this);
+
+                mBuilder.setTitle("Добавление продукта");
+
+                final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
+                final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
+                final NumberPicker numberPicker = (NumberPicker) v.findViewById(R.id.numberPicker);
+                numberPicker.setMaxValue(100);
+                numberPicker.setMinValue(1);
+                numberPicker.setWrapSelectorWheel(false);
+
+                mBuilder.setView(v);
+
+                mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final Product product = new Product();
+                        product.setName(productNameView.getText().toString());
+                        productList.add(product.getName());
+                        products.add(product);
+                        arrayAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                        isAbleToScan = true;
+                        checkButtonVisibility();
+                    }
+                });
+
+                mBuilder.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        isAbleToScan = true;
+                    }
+                });
+
+                AlertDialog dialog = mBuilder.create();
+
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+                dialog.show();
+            }
+        });
+
+        
 /*
         myCamera = getCameraInstance();
         myParameters = myCamera.getParameters();
@@ -207,8 +262,6 @@ public class CameraScanActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
         }
     }
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
