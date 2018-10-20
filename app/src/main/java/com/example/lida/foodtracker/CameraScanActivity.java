@@ -21,6 +21,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -130,11 +131,13 @@ public class CameraScanActivity extends AppCompatActivity {
                     final LayoutInflater inflater = getLayoutInflater();
                     final View chooseAmountDialogView = inflater.inflate(R.layout.choose_amount_dialog, null);
                     //NumberPicker
+                    /*
                     final NumberPicker numberPicker = (NumberPicker) chooseAmountDialogView.findViewById(R.id.dialog_number_picker);
                     numberPicker.setMaxValue(100);
                     numberPicker.setMinValue(1);
                     numberPicker.setWrapSelectorWheel(false);
-
+                    */
+                    final EditText numberPicker = (EditText) chooseAmountDialogView.findViewById(R.id.text_number_picker);
                     //Да нет? Alert dialog
                     AlertDialog alertDialog = new AlertDialog.Builder(CameraScanActivity.this)
                             .setTitle("Выберите количество")
