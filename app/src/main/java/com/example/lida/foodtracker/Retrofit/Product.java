@@ -3,6 +3,7 @@ package com.example.lida.foodtracker.Retrofit;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Product implements Serializable{
     @SerializedName("bar_code")
@@ -16,6 +17,12 @@ public class Product implements Serializable{
 
     @SerializedName("composition")
     private String composition;
+
+    @SerializedName("date_end")
+    private Date dateEnd;
+
+    @SerializedName("quantity")
+    private Integer quantity;
 
     @Override
     public String toString() {
@@ -54,4 +61,11 @@ public class Product implements Serializable{
         this.composition = composition;
     }
 
+    public Date getDateEnd() { return dateEnd; }
+
+    public void setDateEnd(Date date) { this.dateEnd = date; }
+
+    public Integer getQuantity() { return quantity; }
+
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 }
