@@ -16,7 +16,9 @@
         android:hint="@string/enter_product_name"
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true"
+        android:imeOptions="actionDone"/>
 
     <TextView
         android:id="@+id/textView"

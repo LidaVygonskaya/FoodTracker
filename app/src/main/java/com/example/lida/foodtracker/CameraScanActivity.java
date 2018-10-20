@@ -274,7 +274,7 @@ public class CameraScanActivity extends AppCompatActivity {
         if (requestCode == MY_CAMERA_REQUEST_CODE) {
             Log.d(TAG, "adad");
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission GRANDED", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Permission GRANDED", Toast.LENGTH_SHORT).show();
                 myCamera = getCameraInstance();
                 myParameters = myCamera.getParameters();
                 myPreview = new CameraPreview(this, myCamera, myCameraSource, myParameters);
@@ -283,7 +283,7 @@ public class CameraScanActivity extends AppCompatActivity {
                 barcodeDetector.setProcessor(barcodeProcessor);
 
             } else {
-                Toast.makeText(this, "Permission was not GRANDED", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Permission was not GRANDED", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onrequestpermmsion");
 
             }
@@ -297,7 +297,7 @@ public class CameraScanActivity extends AppCompatActivity {
         Camera.Parameters p = null;
         try {
             if (ContextCompat.checkSelfPermission(CameraScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(CameraScanActivity.this, "You have this permission", Toast.LENGTH_LONG).show();
+                //Toast.makeText(CameraScanActivity.this, "You have this permission", Toast.LENGTH_LONG).show();
             } else {
                 requestCameraPermission();
             }
