@@ -76,6 +76,7 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
@@ -85,6 +86,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Product> resultList = (ArrayList<Product>)bundle.getSerializable("BARCODES_LIST");
         for (Product p:resultList) {
             productNames.add(p.getName());
+            addProductToSharedPref(p);
         }
         productAdapter.notifyDataSetChanged();
         Log.d("a", "as");
@@ -94,13 +96,12 @@ public class MainActivity extends BaseActivity {
         List<String> pNames = new ArrayList<String>();
         if (sPref.contains(productsSharedKey)) {
             Gson gson = new Gson();
-            Type type = new TypeToken<List<Product>>(){}.getType();
-            List<Product> prods = gson.fromJson(productsSharedKey, type);
+            String json = sPref.getString(productsSharedKey, null);
+            Type type = new TypeToken<ArrayList<Product>>(){}.getType();
+            ArrayList<Product> prods = gson.fromJson(json, type);
             for (Product p: prods) {
                 pNames.add(p.getName());
             }
-        } else {
-            pNames = new ArrayList<String>();
         }
 
         return pNames;
@@ -108,19 +109,22 @@ public class MainActivity extends BaseActivity {
 
     private void addProductToSharedPref(Product product) {
         Gson gson = new Gson();
-        List<Product> prods;
+        ArrayList<Product> prods;
         if (sPref.contains(productsSharedKey)){
-            Type type = new TypeToken<List<Product>>(){}.getType();
-            prods = gson.fromJson(productsSharedKey, type);
-            prods.add(product);
-            SharedPreferences.Editor editor = sPref.edit();
-            String json = gson.toJson(prods);
-            editor.putString(productsSharedKey, json);
-            editor.apply();
+            String json = sPref.getString(productsSharedKey, null);
+            Type type = new TypeToken<ArrayList<Product>>(){}.getType();
+            prods = gson.fromJson(json, type);
+
 
         } else {
+            prods = new ArrayList<Product>();
             Log.d(TAG, "NET NICHEGO V SHARED PREFS");
         }
+        prods.add(product);
+        SharedPreferences.Editor editor = sPref.edit();
+        String json = gson.toJson(prods);
+        editor.putString(productsSharedKey, json);
+        editor.apply();
     }
 
 
