@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -49,6 +50,7 @@ public class CameraScanActivity extends AppCompatActivity {
     private SurfaceView cameraView;
     private ListView barcodeInfo;
     private Button buttonSave;
+    private TextView buttonSaveEmpty;
     private BarcodeDetector barcodeDetector;
     private Toolbar toolbar;
     private ImageButton exitButton;
@@ -72,13 +74,15 @@ public class CameraScanActivity extends AppCompatActivity {
         buttonSave = (Button) findViewById(R.id.button_save);
         buttonSave.setOnClickListener(saveListener);
 
+        buttonSaveEmpty = (TextView) findViewById(R.id.button_save_empty);
+
         exitButton = (ImageButton) findViewById(R.id.exit);
         exitButton.setOnClickListener(exitListener);
 
         products = new ArrayList<Product>();
 
         productList = new ArrayList<String>();
-        productList.add(getString(R.string.add_product_start));
+        //productList.add(getString(R.string.add_product_start));
 
         barcodeInfo = (ListView) findViewById(R.id.barcodeTextView);
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productList);
@@ -252,8 +256,10 @@ public class CameraScanActivity extends AppCompatActivity {
     public void checkButtonVisibility() {
         if (buttonSave.getVisibility() == View.INVISIBLE && !productList.isEmpty()) {
             buttonSave.setVisibility(View.VISIBLE);
+            buttonSaveEmpty.setVisibility(View.INVISIBLE);
         } else if (productList.isEmpty()) {
             buttonSave.setVisibility(View.INVISIBLE);
+            buttonSaveEmpty.setVisibility(View.VISIBLE);
         }
     }
 
