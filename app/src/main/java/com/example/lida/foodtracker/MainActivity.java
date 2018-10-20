@@ -1,6 +1,7 @@
 package com.example.lida.foodtracker;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -16,7 +17,10 @@ import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
 
 import com.example.lida.foodtracker.Retrofit.Product;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +31,8 @@ public class MainActivity extends BaseActivity {
     private ArrayAdapter<String> productAdapter;
     private List<String> productNames;
     private Toolbar toolbar;
+    private SharedPreferences sPref;
+    private String productsSharedKey = "Products";
 
     @Override
     int getContentViewId() {
@@ -44,10 +50,12 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sPref = getPreferences(MODE_PRIVATE);
+
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
-        productNames = new ArrayList<String>();
+        productNames = loadProductNames();
         productAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productNames);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -68,6 +76,7 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
@@ -77,9 +86,47 @@ public class MainActivity extends BaseActivity {
         ArrayList<Product> resultList = (ArrayList<Product>)bundle.getSerializable("BARCODES_LIST");
         for (Product p:resultList) {
             productNames.add(p.getName());
+            addProductToSharedPref(p);
         }
         productAdapter.notifyDataSetChanged();
         Log.d("a", "as");
     }
+
+    private List<String> loadProductNames() {
+        List<String> pNames = new ArrayList<String>();
+        if (sPref.contains(productsSharedKey)) {
+            Gson gson = new Gson();
+            String json = sPref.getString(productsSharedKey, null);
+            Type type = new TypeToken<ArrayList<Product>>(){}.getType();
+            ArrayList<Product> prods = gson.fromJson(json, type);
+            for (Product p: prods) {
+                pNames.add(p.getName());
+            }
+        }
+
+        return pNames;
+    }
+
+    private void addProductToSharedPref(Product product) {
+        Gson gson = new Gson();
+        ArrayList<Product> prods;
+        if (sPref.contains(productsSharedKey)){
+            String json = sPref.getString(productsSharedKey, null);
+            Type type = new TypeToken<ArrayList<Product>>(){}.getType();
+            prods = gson.fromJson(json, type);
+
+
+        } else {
+            prods = new ArrayList<Product>();
+            Log.d(TAG, "NET NICHEGO V SHARED PREFS");
+        }
+        prods.add(product);
+        SharedPreferences.Editor editor = sPref.edit();
+        String json = gson.toJson(prods);
+        editor.putString(productsSharedKey, json);
+        editor.apply();
+    }
+
+
 
 }
