@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.support.annotation.NonNull;
@@ -33,6 +34,7 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -64,6 +66,7 @@ public class CameraScanActivity extends AppCompatActivity {
     private CameraSource myCameraSource;
     private Camera.Parameters myParameters;
     private boolean isAbleToScan = true;
+    private SharedPreferences sPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,11 +296,21 @@ public class CameraScanActivity extends AppCompatActivity {
     View.OnClickListener saveListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
             bundle.putSerializable("BARCODES_LIST", (Serializable) products);//Список продуктов
             intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
+
+      /*      String key = "Products";
+            sPref = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = sPref.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(products);
+            editor.putString("Products", json);
+            editor.apply();*/
+
             finish();
         }
     };
