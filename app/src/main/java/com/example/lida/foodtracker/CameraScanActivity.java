@@ -62,8 +62,8 @@ public class CameraScanActivity extends AppCompatActivity {
     private ImageButton exitButton;
     private Button manualInput;
 
-    private ArrayAdapter<String> arrayAdapter;
-    private List<String> productList;
+    private ProductAdapter arrayAdapter;
+    private List<String> productList, counts;
     private List<Product> products;
     private static final String TAG = "CAMERA_SCAN_ACTIVITY";
     private ProgressDialog progressDialog;
@@ -90,10 +90,10 @@ public class CameraScanActivity extends AppCompatActivity {
         products = new ArrayList<Product>();
 
         productList = new ArrayList<String>();
-        //productList.add(getString(R.string.add_product_start));
+        counts = new ArrayList<>();
 
         barcodeInfo = (ListView) findViewById(R.id.barcodeTextView);
-        arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productList);
+        arrayAdapter = new ProductAdapter(this, productList, counts);
 
         barcodeInfo.setAdapter(arrayAdapter);
         barcodeDetector = new BarcodeDetector.Builder(this)
@@ -128,7 +128,9 @@ public class CameraScanActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         final Product product = new Product();
                         product.setName(productNameView.getText().toString());
+                        product.setQuantity(numberPicker.getValue());
                         productList.add(product.getName());
+                        counts.add(product.getQuantity().toString());
                         products.add(product);
                         arrayAdapter.notifyDataSetChanged();
                         dialog.dismiss();
@@ -152,17 +154,6 @@ public class CameraScanActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-
-        
-/*
-        myCamera = getCameraInstance();
-        myParameters = myCamera.getParameters();
-        myPreview = new CameraPreview(this, myCamera, myCameraSource, myParameters);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_view);
-        preview.addView(myPreview);
-
-
-        barcodeDetector.setProcessor(barcodeProcessor);*/
     }
 
     public void getProductInformation(final String barcode) {
@@ -184,14 +175,13 @@ public class CameraScanActivity extends AppCompatActivity {
 
                     final LayoutInflater inflater = getLayoutInflater();
                     final View chooseAmountDialogView = inflater.inflate(R.layout.choose_amount_dialog, null);
-                    //NumberPicker
-                    /*
+
                     final NumberPicker numberPicker = (NumberPicker) chooseAmountDialogView.findViewById(R.id.dialog_number_picker);
                     numberPicker.setMaxValue(100);
                     numberPicker.setMinValue(1);
                     numberPicker.setWrapSelectorWheel(false);
-                    */
-                    final EditText numberPicker = (EditText) chooseAmountDialogView.findViewById(R.id.text_number_picker);
+
+                    //final EditText numberPicker = (EditText) chooseAmountDialogView.findViewById(R.id.text_number_picker);
                     //Да нет? Alert dialog
                     AlertDialog alertDialog = new AlertDialog.Builder(CameraScanActivity.this)
                             .setTitle("Выберите количество")
@@ -199,7 +189,9 @@ public class CameraScanActivity extends AppCompatActivity {
                             .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    product.setQuantity(numberPicker.getValue());
                                     productList.add(product.getName());
+                                    counts.add(product.getQuantity().toString());
                                     products.add(product);
                                     arrayAdapter.notifyDataSetChanged();
                                     dialog.dismiss();
@@ -274,7 +266,6 @@ public class CameraScanActivity extends AppCompatActivity {
         if (requestCode == MY_CAMERA_REQUEST_CODE) {
             Log.d(TAG, "adad");
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //Toast.makeText(this, "Permission GRANDED", Toast.LENGTH_SHORT).show();
                 myCamera = getCameraInstance();
                 myParameters = myCamera.getParameters();
                 myPreview = new CameraPreview(this, myCamera, myCameraSource, myParameters);
@@ -283,9 +274,7 @@ public class CameraScanActivity extends AppCompatActivity {
                 barcodeDetector.setProcessor(barcodeProcessor);
 
             } else {
-                //Toast.makeText(this, "Permission was not GRANDED", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onrequestpermmsion");
-
             }
             return;
         }
@@ -337,16 +326,8 @@ public class CameraScanActivity extends AppCompatActivity {
                         isAbleToScan = false;
                         Barcode thisBarcode = (Barcode) barcodes.valueAt(0);
                         Log.d(TAG, thisBarcode.rawValue);
-                        //Intent intent = new Intent();
-                        //intent.putExtra("barcode", thisBarcode.rawValue);
-                        //productList.add(thisBarcode.rawValue);
-                        //arrayAdapter.notifyDataSetChanged();
                         barcodes.clear();
                         getProductInformation(thisBarcode.rawValue);
-                        //setResult(RESULT_OK, intent);
-
-                        //finish();
-
                     }
                 });
             }
@@ -363,14 +344,6 @@ public class CameraScanActivity extends AppCompatActivity {
             bundle.putSerializable("BARCODES_LIST", (Serializable) products);//Список продуктов
             intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
-
-      /*      String key = "Products";
-            sPref = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = sPref.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(products);
-            editor.putString("Products", json);
-            editor.apply();*/
 
             finish();
         }
@@ -395,21 +368,5 @@ public class CameraScanActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        /*if (myPreview == null) {
-
-            try {
-                if (ContextCompat.checkSelfPermission(CameraScanActivity.this,
-                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(CameraScanActivity.this, "You have this permission", Toast.LENGTH_LONG).show();
-                    myCameraSource.start(myPreview.getHolder());
-                } else {
-                    requestCameraPermission();
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
-
     }
 }

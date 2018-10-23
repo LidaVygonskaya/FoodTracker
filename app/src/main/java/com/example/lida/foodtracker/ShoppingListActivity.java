@@ -68,7 +68,7 @@ public class ShoppingListActivity extends BaseActivity {
 
         productList = new ArrayList<String>() ;
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, productList);
+        adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productList);
         shoppingList.setAdapter(adapter);
 
         addShoppingListButton = (FloatingActionButton) findViewById(R.id.add_shopping_list);

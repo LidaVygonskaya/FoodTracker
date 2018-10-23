@@ -28,8 +28,8 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private ImageButton addProductButton;
     private ListView productList;
-    private ArrayAdapter<String> productAdapter;
-    private List<String> productNames;
+    private ProductAdapter productAdapter;
+    private List<String> productNames, counts;
     private Toolbar toolbar;
     private SharedPreferences sPref;
     private String productsSharedKey = "Products";
@@ -55,12 +55,13 @@ public class MainActivity extends BaseActivity {
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
-        productNames = loadProductNames();
-        productAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productNames);
+        productNames = new ArrayList<>();
+        counts = new ArrayList<>();
+        loadData();
+        productAdapter = new ProductAdapter(this, productNames, counts);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         productList = (ListView) findViewById(R.id.productList);
         productList.setAdapter(productAdapter);
@@ -86,13 +87,14 @@ public class MainActivity extends BaseActivity {
         ArrayList<Product> resultList = (ArrayList<Product>)bundle.getSerializable("BARCODES_LIST");
         for (Product p:resultList) {
             productNames.add(p.getName());
+            counts.add(p.getQuantity().toString());
             addProductToSharedPref(p);
         }
         productAdapter.notifyDataSetChanged();
         Log.d("a", "as");
     }
 
-    private List<String> loadProductNames() {
+    private void loadData() {
         List<String> pNames = new ArrayList<String>();
         if (sPref.contains(productsSharedKey)) {
             Gson gson = new Gson();
@@ -100,11 +102,10 @@ public class MainActivity extends BaseActivity {
             Type type = new TypeToken<ArrayList<Product>>(){}.getType();
             ArrayList<Product> prods = gson.fromJson(json, type);
             for (Product p: prods) {
-                pNames.add(p.getName());
+                productNames.add(p.getName());
+                counts.add(p.getQuantity().toString());
             }
         }
-
-        return pNames;
     }
 
     private void addProductToSharedPref(Product product) {
