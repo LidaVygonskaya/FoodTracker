@@ -1,5 +1,6 @@
 package com.example.lida.foodtracker;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -17,18 +18,23 @@ import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
 
 import com.example.lida.foodtracker.Retrofit.Product;
+import com.example.lida.foodtracker.Utils.ProductAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private ImageButton addProductButton;
     private ListView productList;
+
     private ArrayAdapter<String> productAdapter;
+    private ProductAdapter adapter;
+
     private List<String> productNames;
     private Toolbar toolbar;
     private SharedPreferences sPref;
@@ -57,13 +63,15 @@ public class MainActivity extends BaseActivity {
 
         productNames = loadProductNames();
         productAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productNames);
+        adapter = new ProductAdapter(this, productNames, R.drawable.fridge);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         productList = (ListView) findViewById(R.id.productList);
-        productList.setAdapter(productAdapter);
+        //productList.setAdapter(productAdapter);
+        productList.setAdapter(adapter);
         productList.setEmptyView(findViewById(R.id.empty_group));
 
         addProductButton = (ImageButton) findViewById(R.id.add_product);
@@ -83,7 +91,7 @@ public class MainActivity extends BaseActivity {
             return;
         }
         Bundle bundle = data.getExtras();
-        ArrayList<Product> resultList = (ArrayList<Product>)bundle.getSerializable("BARCODES_LIST");
+        List<Product> resultList = (ArrayList<Product>)bundle.getSerializable("BARCODES_LIST");
         for (Product p:resultList) {
             productNames.add(p.getName());
             addProductToSharedPref(p);
@@ -98,7 +106,8 @@ public class MainActivity extends BaseActivity {
             Gson gson = new Gson();
             String json = sPref.getString(productsSharedKey, null);
             Type type = new TypeToken<ArrayList<Product>>(){}.getType();
-            ArrayList<Product> prods = gson.fromJson(json, type);
+            List<Product> prods = gson.fromJson(json, type);
+            sortProducts(prods);
             for (Product p: prods) {
                 pNames.add(p.getName());
             }
@@ -109,7 +118,7 @@ public class MainActivity extends BaseActivity {
 
     private void addProductToSharedPref(Product product) {
         Gson gson = new Gson();
-        ArrayList<Product> prods;
+        List<Product> prods;
         if (sPref.contains(productsSharedKey)){
             String json = sPref.getString(productsSharedKey, null);
             Type type = new TypeToken<ArrayList<Product>>(){}.getType();
@@ -127,6 +136,12 @@ public class MainActivity extends BaseActivity {
         editor.apply();
     }
 
-
-
+    @SuppressLint("NewApi")
+    private void sortProducts(List<Product> prod) {
+        Log.d(TAG, "Представь что я отсортировался");
+        /* Не работает разберись почему
+        NoClassDefFoundError
+        prod.sort(Comparator.comparing(Product::getDateEnd));
+        */
+    }
 }

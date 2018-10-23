@@ -1,9 +1,14 @@
 package com.example.lida.foodtracker.Retrofit;
 
+import android.widget.DatePicker;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.time.Month;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Product implements Serializable{
     @SerializedName("bar_code")
@@ -18,11 +23,17 @@ public class Product implements Serializable{
     @SerializedName("composition")
     private String composition;
 
-    @SerializedName("date_end")
-    private Date dateEnd;
+    //@SerializedName("date_end")
+    private Integer dayEnd;
 
-    @SerializedName("quantity")
+    private Integer yearEnd;
+
+    private Integer monthEnd;
+
+    //@SerializedName("quantity")
     private Integer quantity;
+
+    private Date dateEnd;
 
     @Override
     public String toString() {
@@ -61,9 +72,27 @@ public class Product implements Serializable{
         this.composition = composition;
     }
 
-    public Date getDateEnd() { return dateEnd; }
+    public void setData(DatePicker datePicker) {
+        this.dayEnd = datePicker.getDayOfMonth();
+        this.monthEnd = datePicker.getMonth();
+        this.yearEnd = datePicker.getYear();
+    }
 
-    public void setDateEnd(Date date) { this.dateEnd = date; }
+    public Map<String, Integer> getData() {
+        Map<String, Integer> data = new HashMap<>();
+        data.put("day", this.dayEnd);
+        data.put("month", this.monthEnd);
+        data.put("year", this.yearEnd);
+        return data;
+    }
+
+    public void setDateEnd() {
+        this.dateEnd = new Date(this.yearEnd, this.monthEnd, this.dayEnd);
+    }
+
+    public Date getDateEnd() {
+        return dateEnd;
+    }
 
     public Integer getQuantity() { return quantity; }
 

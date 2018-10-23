@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -90,7 +91,6 @@ public class CameraScanActivity extends AppCompatActivity {
         products = new ArrayList<Product>();
 
         productList = new ArrayList<String>();
-        //productList.add(getString(R.string.add_product_start));
 
         barcodeInfo = (ListView) findViewById(R.id.barcodeTextView);
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productList);
@@ -110,6 +110,8 @@ public class CameraScanActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final LayoutInflater inflater = CameraScanActivity.this.getLayoutInflater();
                 v = inflater.inflate(R.layout.add_product, null);
+
+                //Dialog for
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(CameraScanActivity.this);
 
                 mBuilder.setTitle("Добавление продукта");
@@ -126,10 +128,7 @@ public class CameraScanActivity extends AppCompatActivity {
                 mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        final Product product = new Product();
-                        product.setName(productNameView.getText().toString());
-                        productList.add(product.getName());
-                        products.add(product);
+                        createProduct(date, numberPicker, productNameView);
                         arrayAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                         isAbleToScan = true;
@@ -192,6 +191,7 @@ public class CameraScanActivity extends AppCompatActivity {
                     numberPicker.setWrapSelectorWheel(false);
                     */
                     final EditText numberPicker = (EditText) chooseAmountDialogView.findViewById(R.id.text_number_picker);
+                    final DatePicker datePicker = (DatePicker) chooseAmountDialogView.findViewById(R.id.date_picker);
                     //Да нет? Alert dialog
                     AlertDialog alertDialog = new AlertDialog.Builder(CameraScanActivity.this)
                             .setTitle("Выберите количество")
@@ -199,6 +199,9 @@ public class CameraScanActivity extends AppCompatActivity {
                             .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    product.setData(datePicker);
+                                    product.setQuantity(Integer.parseInt(numberPicker.getText().toString()));
+                                    product.setDateEnd();
                                     productList.add(product.getName());
                                     products.add(product);
                                     arrayAdapter.notifyDataSetChanged();
@@ -351,8 +354,17 @@ public class CameraScanActivity extends AppCompatActivity {
                 });
             }
         }
-
     };
+
+    public void createProduct(DatePicker date, NumberPicker quantity, EditText name) {
+        Product product = new Product();
+        product.setData(date);
+        product.setQuantity(quantity.getValue());
+        product.setName(name.getText().toString());
+        product.setDateEnd();
+        productList.add(String.format(Locale.getDefault(), "%s (x%d)", product.getName(), product.getQuantity()));
+        products.add(product);
+    }
 
     View.OnClickListener saveListener = new View.OnClickListener() {
         @Override
@@ -412,4 +424,5 @@ public class CameraScanActivity extends AppCompatActivity {
         }*/
 
     }
+
 }
