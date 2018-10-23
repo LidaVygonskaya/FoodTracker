@@ -10,18 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f07e4aec-b9ff-4837-8cfa-a69fca1facd7" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Utils/ProductAdapter.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Utils/ProductFridgeAdapter.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/res/layout/product_list_item.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/ProductAdapter.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/res/layout/list_item.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/MainActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/MainActivity.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Retrofit/Product.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Retrofit/Product.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Retrofit/Urls.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Retrofit/Urls.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/ShoppingListActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/ShoppingListActivity.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/add_product.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/add_product.xml" />
       <change beforePath="$PROJECT_DIR$/src/main/res/layout/choose_amount_dialog.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/choose_amount_dialog.xml" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/src/main/res/values/strings.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -44,16 +41,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CameraScanActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CameraScanActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1566">
-              <caret line="76" column="36" lean-forward="false" selection-start-line="76" selection-start-column="36" selection-end-line="76" selection-end-column="36" />
+            <state relative-caret-position="108">
+              <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
               <folding>
-                <element signature="e#11132#11133#0" expanded="true" />
-                <element signature="e#11204#11205#0" expanded="true" />
-                <element signature="e#16229#16230#0" expanded="true" />
-                <element signature="e#16261#16262#0" expanded="true" />
+                <element signature="e#11223#11224#0" expanded="true" />
+                <element signature="e#11295#11296#0" expanded="true" />
+                <element signature="e#16236#16237#0" expanded="true" />
+                <element signature="e#16268#16269#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -125,11 +122,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProductAdapter.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ProductAdapter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Utils/ProductAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-27">
-              <caret line="31" column="23" lean-forward="false" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
+            <state relative-caret-position="441">
+              <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -153,8 +150,8 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="140" column="50" lean-forward="false" selection-start-line="140" selection-start-column="50" selection-end-line="140" selection-end-column="50" />
+            <state relative-caret-position="153">
+              <caret line="71" column="12" lean-forward="false" selection-start-line="71" selection-start-column="12" selection-end-line="71" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1388#1389#0" expanded="true" />
@@ -188,6 +185,7 @@
       <find>Toas</find>
       <find>set</find>
       <find>ArrayList</find>
+      <find>load</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -2277,12 +2275,12 @@
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Retrofit/Product.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/choose_amount_dialog.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Utils/ProductFridgeAdapter.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/product_list_item.xml" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/MainActivity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Utils/ProductAdapter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/MainActivity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java" />
       </list>
     </option>
   </component>
@@ -2554,18 +2552,6 @@
       <module name="" />
       <envs />
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <module name="FoodTracker" />
-      <envs />
-    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -2614,6 +2600,18 @@
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <module name="FoodTracker" />
+      <envs />
     </configuration>
     <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
@@ -2711,24 +2709,24 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java</url>
-          <line>343</line>
+          <line>349</line>
           <properties />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java</url>
-          <line>92</line>
+          <line>96</line>
           <properties />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java</url>
-          <line>183</line>
+          <line>187</line>
           <properties />
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java</url>
-          <line>180</line>
+          <line>184</line>
           <properties />
           <option name="timeStamp" value="5" />
         </line-breakpoint>
@@ -2781,10 +2779,10 @@
         <state relative-caret-position="4356">
           <caret line="284" column="0" lean-forward="false" selection-start-line="284" selection-start-column="0" selection-end-line="284" selection-end-column="0" />
           <folding>
-            <element signature="e#11132#11133#0" expanded="true" />
-            <element signature="e#11204#11205#0" expanded="true" />
-            <element signature="e#16229#16230#0" expanded="true" />
-            <element signature="e#16261#16262#0" expanded="true" />
+            <element signature="e#11223#11224#0" expanded="true" />
+            <element signature="e#11295#11296#0" expanded="true" />
+            <element signature="e#16236#16237#0" expanded="true" />
+            <element signature="e#16268#16269#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2993,7 +2991,7 @@
         <state relative-caret-position="576">
           <caret line="66" column="60" lean-forward="false" selection-start-line="66" selection-start-column="60" selection-end-line="66" selection-end-column="60" />
           <folding>
-            <marker date="1540032413405" expanded="true" signature="4537:4543" ph="{...}" />
+            <marker date="1540335818429" expanded="true" signature="4513:4519" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -3052,19 +3050,6 @@
         <state relative-caret-position="504">
           <caret line="28" column="60" lean-forward="false" selection-start-line="28" selection-start-column="60" selection-end-line="28" selection-end-column="60" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1566">
-          <caret line="76" column="36" lean-forward="false" selection-start-line="76" selection-start-column="36" selection-end-line="76" selection-end-column="36" />
-          <folding>
-            <element signature="e#11132#11133#0" expanded="true" />
-            <element signature="e#11204#11205#0" expanded="true" />
-            <element signature="e#16229#16230#0" expanded="true" />
-            <element signature="e#16261#16262#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3138,21 +3123,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="140" column="50" lean-forward="false" selection-start-line="140" selection-start-column="50" selection-end-line="140" selection-end-column="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1388#1389#0" expanded="true" />
-            <element signature="e#1433#1434#0" expanded="true" />
-            <element signature="e#1484#1485#0" expanded="true" />
-            <element signature="e#1518#1519#0" expanded="true" />
-            <element signature="e#3526#3534#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/product_list_item.xml">
       <provider editor-type-id="android-designer2">
         <state />
@@ -3166,10 +3136,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/Utils/ProductAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-27">
-          <caret line="31" column="23" lean-forward="false" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
+        <state relative-caret-position="441">
+          <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="71" column="12" lean-forward="false" selection-start-line="71" selection-start-column="12" selection-end-line="71" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1388#1389#0" expanded="true" />
+            <element signature="e#1433#1434#0" expanded="true" />
+            <element signature="e#1484#1485#0" expanded="true" />
+            <element signature="e#1518#1519#0" expanded="true" />
+            <element signature="e#3526#3534#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lida/foodtracker/CameraScanActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding>
+            <element signature="e#11223#11224#0" expanded="true" />
+            <element signature="e#11295#11296#0" expanded="true" />
+            <element signature="e#16236#16237#0" expanded="true" />
+            <element signature="e#16268#16269#0" expanded="true" />
           </folding>
         </state>
       </provider>

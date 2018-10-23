@@ -7,7 +7,7 @@
     <string name="button_save">Сохранить</string>
     <string name="add_product_start">Начните сканировать продукты</string>
     <string name="title_activity_main2">Main2Activity</string>
-    <string name="my_fridges">Мои холодильники</string>
+    <string name="my_fridges">Мой холодильник</string>
     <string name="CameraScanActivity">Добавить продукт</string>
     <string name="enter_product_name">Введите имя продукта</string>
     <string name="fridge_empty">Кажется ваш холодильник пуст! Начните добавлять продукты :)</string>

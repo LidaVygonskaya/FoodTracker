@@ -75,11 +75,15 @@ public class CameraScanActivity extends AppCompatActivity {
     private Camera.Parameters myParameters;
     private boolean isAbleToScan = true;
     private SharedPreferences sPref;
+    private FrameLayout preview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_scan);
+
+        preview = (FrameLayout) findViewById(R.id.camera_view);
+
         buttonSave = (Button) findViewById(R.id.button_save);
         buttonSave.setOnClickListener(saveListener);
 
@@ -152,7 +156,7 @@ public class CameraScanActivity extends AppCompatActivity {
             }
         });
 
-        
+
 /*
         myCamera = getCameraInstance();
         myParameters = myCamera.getParameters();
@@ -281,7 +285,6 @@ public class CameraScanActivity extends AppCompatActivity {
                 myCamera = getCameraInstance();
                 myParameters = myCamera.getParameters();
                 myPreview = new CameraPreview(this, myCamera, myCameraSource, myParameters);
-                FrameLayout preview = (FrameLayout) findViewById(R.id.camera_view);
                 preview.addView(myPreview);
                 barcodeDetector.setProcessor(barcodeProcessor);
 
