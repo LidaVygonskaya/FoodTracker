@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -22,6 +23,7 @@ import com.example.lida.foodtracker.Utils.ProductAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -72,6 +74,18 @@ public class MainActivity extends BaseActivity {
         productList = (ListView) findViewById(R.id.productList);
         productList.setAdapter(productAdapter);
         productList.setEmptyView(findViewById(R.id.empty_group));
+        productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
+
+                Product product = new Product(productNames.get(position), descriptions.get(position),
+                        counts.get(position), dates.get(position), imgIds.get(position));
+                intent.putExtra("PRODUCT", product);
+
+                startActivity(intent);
+            }
+        });
 
         addProductButton = (ImageButton) findViewById(R.id.add_product);
         addProductButton.setOnClickListener(new View.OnClickListener() {
