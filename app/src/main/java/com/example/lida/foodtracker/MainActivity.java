@@ -25,6 +25,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
@@ -32,10 +33,11 @@ public class MainActivity extends BaseActivity {
     private ImageButton addProductButton;
     private ListView productList;
 
-    private ArrayAdapter<String> productAdapter;
-    private ProductAdapter adapter;
+    private ProductAdapter productAdapter;
 
-    private List<String> productNames;
+    private List<String> productNames, descriptions;
+    private List<Integer> counts, imgIds;
+    private List<Date> dates;
     private Toolbar toolbar;
     private SharedPreferences sPref;
     private String productsSharedKey = "Products";
@@ -61,17 +63,14 @@ public class MainActivity extends BaseActivity {
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
-        productNames = loadProductNames();
-        productAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productNames);
-        adapter = new ProductAdapter(this, productNames, R.drawable.fridge);
+        loadProducts();
+        productAdapter = new ProductAdapter(this, productNames, descriptions, counts, dates, imgIds);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         productList = (ListView) findViewById(R.id.productList);
-        //productList.setAdapter(productAdapter);
-        productList.setAdapter(adapter);
+        productList.setAdapter(productAdapter);
         productList.setEmptyView(findViewById(R.id.empty_group));
 
         addProductButton = (ImageButton) findViewById(R.id.add_product);
@@ -94,14 +93,23 @@ public class MainActivity extends BaseActivity {
         List<Product> resultList = (ArrayList<Product>)bundle.getSerializable("BARCODES_LIST");
         for (Product p:resultList) {
             productNames.add(p.getName());
+            descriptions.add(p.getDescription());
+            counts.add(p.getQuantity());
+            dates.add(p.getDateEnd());
+            imgIds.add(p.getImgId());
             addProductToSharedPref(p);
         }
         productAdapter.notifyDataSetChanged();
         Log.d("a", "as");
     }
 
-    private List<String> loadProductNames() {
-        List<String> pNames = new ArrayList<String>();
+    private void loadProducts() {
+        productNames = new ArrayList<>();
+        descriptions = new ArrayList<>();
+        counts = new ArrayList<>();
+        dates = new ArrayList<>();
+        imgIds = new ArrayList<>();
+
         if (sPref.contains(productsSharedKey)) {
             Gson gson = new Gson();
             String json = sPref.getString(productsSharedKey, null);
@@ -109,11 +117,13 @@ public class MainActivity extends BaseActivity {
             List<Product> prods = gson.fromJson(json, type);
             sortProducts(prods);
             for (Product p: prods) {
-                pNames.add(p.getName());
+                productNames.add(p.getName());
+                descriptions.add(p.getDescription());
+                counts.add(p.getQuantity());
+                dates.add(p.getDateEnd());
+                imgIds.add(p.getImgId());
             }
         }
-
-        return pNames;
     }
 
     private void addProductToSharedPref(Product product) {
