@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [HOCKEYAPP_APP_ID: "1d17947bb7f24e4abd970bb57cdd0b40"]
     }
     buildTypes {
         release {
@@ -34,6 +35,8 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'net.hockeyapp.android:HockeySDK:5.1.1'
+
 
 
 }
