@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.example.lida.foodtracker.Retrofit.App;
 import com.example.lida.foodtracker.Retrofit.Product;
+import com.example.lida.foodtracker.Utils.ProductAdapter;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -46,6 +47,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -55,6 +57,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
 public class CameraScanActivity extends AppCompatActivity {
     private ListView barcodeInfo;
     private Button buttonSave;
@@ -63,8 +66,10 @@ public class CameraScanActivity extends AppCompatActivity {
     private ImageButton exitButton;
     private Button manualInput;
 
-    private ArrayAdapter<String> arrayAdapter;
-    private List<String> productList;
+    private ProductAdapter arrayAdapter;
+    private List<String> productList, descriptions;
+    private List<Integer> counts, imgIds;
+    private List<Date> dates;
     private List<Product> products;
     private static final String TAG = "CAMERA_SCAN_ACTIVITY";
     private ProgressDialog progressDialog;
@@ -95,9 +100,14 @@ public class CameraScanActivity extends AppCompatActivity {
         products = new ArrayList<Product>();
 
         productList = new ArrayList<String>();
+        counts = new ArrayList<>();
+        descriptions = new ArrayList<>();
+        dates = new ArrayList<>();
+        imgIds = new ArrayList<>();
 
         barcodeInfo = (ListView) findViewById(R.id.barcodeTextView);
-        arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productList);
+        //arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productList);
+        arrayAdapter = new ProductAdapter(this, productList, descriptions, counts, dates, imgIds);
 
         barcodeInfo.setAdapter(arrayAdapter);
         barcodeDetector = new BarcodeDetector.Builder(this)
@@ -206,7 +216,13 @@ public class CameraScanActivity extends AppCompatActivity {
                                     product.setData(datePicker);
                                     product.setQuantity(Integer.parseInt(numberPicker.getText().toString()));
                                     product.setDateEnd();
+                                    product.setDescription("smth description");
+                                    product.setImgId(R.drawable.fridge);
                                     productList.add(product.getName());
+                                    descriptions.add(product.getDescription());
+                                    counts.add(product.getQuantity());
+                                    dates.add(product.getDateEnd());
+                                    imgIds.add(product.getImgId());
                                     products.add(product);
                                     arrayAdapter.notifyDataSetChanged();
                                     dialog.dismiss();
@@ -364,8 +380,17 @@ public class CameraScanActivity extends AppCompatActivity {
         product.setData(date);
         product.setQuantity(quantity.getValue());
         product.setName(name.getText().toString());
+        ////
+        product.setDescription("smth description");
         product.setDateEnd();
-        productList.add(String.format(Locale.getDefault(), "%s (x%d)", product.getName(), product.getQuantity()));
+        ///
+        product.setImgId(R.drawable.fridge);
+        ///
+        productList.add(product.getName());
+        descriptions.add(product.getDescription());
+        counts.add(product.getQuantity());
+        dates.add(product.getDateEnd());
+        imgIds.add(product.getImgId());
         products.add(product);
     }
 

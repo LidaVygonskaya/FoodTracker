@@ -35,6 +35,18 @@ public class Product implements Serializable{
 
     private Date dateEnd;
 
+    private Integer imgId;
+
+    public Product() {}
+
+    public Product(String name, String description, Integer count, Date date, Integer imgId) {
+        this.name = name;
+        this.description = description;
+        this.quantity = count;
+        this.dateEnd = date;
+        this.imgId = imgId;
+    }
+
     @Override
     public String toString() {
         return name;
@@ -59,6 +71,8 @@ public class Product implements Serializable{
     public String getDescription() {
         return description;
     }
+
+    public Integer getImgId() { return imgId; }
 
     public void setDescription(String description) {
         this.description = description;
@@ -97,4 +111,10 @@ public class Product implements Serializable{
     public Integer getQuantity() { return quantity; }
 
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    public void setImgId(Integer imgId) { this.imgId = imgId; }
+
+    public String getDateEndInStringFormat() {
+        return dateEnd.getDate() + "." + dateEnd.getMonth() + "." + dateEnd.getYear();
+    }
 }
