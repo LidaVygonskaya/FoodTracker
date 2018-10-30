@@ -5,7 +5,7 @@
     <string name="recipes">Рецепты</string>
     <string name="settings">Настройки</string>
     <string name="button_save">Сохранить</string>
-    <string name="add_product_start">Начните сканировать продукты</string>
+    <string name="add_product_start">Начните сканировать продукты или введите их вручную :)</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="my_fridges">Мой холодильник</string>
     <string name="CameraScanActivity">Добавить продукт</string>
