@@ -107,7 +107,6 @@ public class CameraScanActivity extends AppCompatActivity {
         imgIds = new ArrayList<>();
 
         barcodeInfo = (ListView) findViewById(R.id.barcodeTextView);
-        //arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, productList);
         arrayAdapter = new ProductAdapter(this, productList, descriptions, counts, dates, imgIds);
 
         barcodeInfo.setAdapter(arrayAdapter);
@@ -180,89 +179,63 @@ public class CameraScanActivity extends AppCompatActivity {
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-                Log.d(TAG, response.toString());
-
                 if (response.code() == 200) {
                     final Product product = response.body();
 
+                    final LayoutInflater inflater = CameraScanActivity.this.getLayoutInflater();
 
-                    final LayoutInflater inflater = getLayoutInflater();
-                    final View chooseAmountDialogView = inflater.inflate(R.layout.choose_amount_dialog, null);
-                    //NumberPicker
-                    /*
-                    final NumberPicker numberPicker = (NumberPicker) chooseAmountDialogView.findViewById(R.id.dialog_number_picker);
+                    View v = inflater.inflate(R.layout.add_product, null);
+
+                    //Dialog for
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(CameraScanActivity.this);
+
+                    mBuilder.setTitle("Добавление продукта");
+
+                    final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
+                    productNameView.setText(product.getName());
+                    final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
+                    final NumberPicker numberPicker = (NumberPicker) v.findViewById(R.id.numberPicker);
                     numberPicker.setMaxValue(100);
                     numberPicker.setMinValue(1);
                     numberPicker.setWrapSelectorWheel(false);
-                    */
-                    final EditText numberPicker = (EditText) chooseAmountDialogView.findViewById(R.id.text_number_picker);
-                    final DatePicker datePicker = (DatePicker) chooseAmountDialogView.findViewById(R.id.date_picker);
-                    //Да нет? Alert dialog
-                    AlertDialog alertDialog = new AlertDialog.Builder(CameraScanActivity.this)
-                            .setTitle("Выберите количество")
-                            .setMessage(product.getName())
-                            .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    product.setData(datePicker);
-                                    product.setQuantity(Integer.parseInt(numberPicker.getText().toString()));
-                                    product.setDateEnd();
-                                    product.setDescription("smth description");
-                                    product.setImgId(R.drawable.fridge);
-                                    productList.add(product.getName());
-                                    descriptions.add(product.getDescription());
-                                    counts.add(product.getQuantity());
-                                    dates.add(product.getDateEnd());
-                                    imgIds.add(product.getImgId());
-                                    products.add(product);
-                                    arrayAdapter.notifyDataSetChanged();
-                                    dialog.dismiss();
-                                    isAbleToScan = true;
-                                    checkButtonVisibility();
-                                }
-                            })
-                            .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    isAbleToScan = true;
-                                }
-                            })
-                            .setView(chooseAmountDialogView)
-                            .create();
-                    alertDialog.show();
 
-                } else {
-                    AlertDialog alertDialog = new AlertDialog.Builder(CameraScanActivity.this)
-                            .setTitle("Не можем найти такой продукт")
-                            .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    isAbleToScan = true;
-                                }
-                            })
-                            .create();
+                    mBuilder.setView(v);
 
-                    alertDialog.show();
+                    mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            createProduct(date, numberPicker, productNameView);
+                            arrayAdapter.notifyDataSetChanged();
+                            dialog.dismiss();
+                            isAbleToScan = true;
+                            checkButtonVisibility();
+                        }
+                    });
+
+                    mBuilder.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            isAbleToScan = true;
+                        }
+                    });
+
+                    AlertDialog dialog = mBuilder.create();
+                    dialog.show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Product> call, Throwable t) {
-                Log.d(TAG, "Failed response");
-            }
+            public void onFailure(Call<Product> call, Throwable t) {}
         });
-
     }
-
 
     //Check camera permissions
     private void requestCameraPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             new AlertDialog.Builder(this)
-                    .setTitle("Необходимо разрешение")
-                    .setMessage("Дайте доступ к камере, чтобы мы смогли считывать штрих-код продуктов")
+                    .setTitle("Требуется разрешение к камере")
+                    .setMessage("Пожалуйста, дайте доступ к камере, чтобы мы смогли считывать штрих-код продуктов")
                     .setPositiveButton("Разрешить", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -399,15 +372,6 @@ public class CameraScanActivity extends AppCompatActivity {
             bundle.putSerializable("BARCODES_LIST", (Serializable) products);//Список продуктов
             intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
-
-      /*      String key = "Products";
-            sPref = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = sPref.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(products);
-            editor.putString("Products", json);
-            editor.apply();*/
-
             finish();
         }
     };
@@ -425,28 +389,10 @@ public class CameraScanActivity extends AppCompatActivity {
         if (myPreview != null) {
             myCameraSource.stop();
         }
-        //myCameraSource.stop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        /*if (myPreview == null) {
-
-            try {
-                if (ContextCompat.checkSelfPermission(CameraScanActivity.this,
-                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(CameraScanActivity.this, "You have this permission", Toast.LENGTH_LONG).show();
-                    myCameraSource.start(myPreview.getHolder());
-                } else {
-                    requestCameraPermission();
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
-
     }
-
 }
