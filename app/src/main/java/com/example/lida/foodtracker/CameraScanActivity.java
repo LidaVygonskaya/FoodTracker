@@ -158,7 +158,7 @@ public class CameraScanActivity extends AppCompatActivity {
                         isAbleToScan = true;
                     }
                 });
-                
+
                 AlertDialog dialog = mBuilder.create();
 
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

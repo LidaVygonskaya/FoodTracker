@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -35,6 +36,8 @@ import java.util.ListIterator;
 
 public class ShoppingListActivity extends BaseActivity {
 
+    //TODO: При нажатии где-то кроме сделать анфокус
+    //TODO: Уезжает Навигейшн
     @Override
     int getContentViewId() {
         return R.layout.activity_shopping_list;
@@ -61,6 +64,9 @@ public class ShoppingListActivity extends BaseActivity {
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
+        shoppingListText = findViewById(R.id.add_product_edit_text);
+        shoppingListText.setOnFocusChangeListener(onFocusChangeListener);
+
         inflater = ShoppingListActivity.this.getLayoutInflater();
 
         shoppingList = (ListView) findViewById(R.id.shopp_list);
@@ -75,44 +81,11 @@ public class ShoppingListActivity extends BaseActivity {
         addShoppingListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v = inflater.inflate(R.layout.add_shopping_list, null);
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(ShoppingListActivity.this);
+                shoppingListText.setOnKeyListener(onEditTextClickListener);
+                shoppingListText.requestFocus();
 
-                mBuilder.setTitle("Вводи продукты :)");
-                mBuilder.setMessage("Можешь вводить товары через запятую или на новой строке");
-                mBuilder.setView(v);
-
-                shoppingListText = (EditText)v.findViewById(R.id.add_shoppig_list_text);
-                hideKeyboard(v);
-
-                mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            String shopList = shoppingListText.getText().toString();
-                            for (String p : shopList.split("\n|,")) {
-                                productList.add(p);
-                            }
-                            adapter.notifyDataSetChanged();
-                        }
-                        catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-                mBuilder.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-                AlertDialog dialog = mBuilder.create();
-
-                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-                dialog.show();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(shoppingListText, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 
@@ -123,4 +96,28 @@ public class ShoppingListActivity extends BaseActivity {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    View.OnKeyListener onEditTextClickListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                String textProduct = shoppingListText.getText().toString();
+                productList.add(textProduct);
+                adapter.notifyDataSetChanged();
+                return true;
+            }
+            return false;
+        }
+    };
+
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus) {
+                hideKeyboard(v);
+                shoppingListText.setOnKeyListener(null);
+                shoppingListText.getText().clear();
+            }
+        }
+    };
 }
+
