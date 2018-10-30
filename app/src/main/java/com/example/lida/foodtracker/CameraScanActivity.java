@@ -45,6 +45,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.Policy;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -117,7 +118,7 @@ public class CameraScanActivity extends AppCompatActivity {
                 .setAutoFocusEnabled(true)
                 .build();
         requestCameraPermission();
-
+        //myParameters = myCamera.getParameters();
         manualInput = (Button) findViewById(R.id.manual_input);
         manualInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +158,7 @@ public class CameraScanActivity extends AppCompatActivity {
                         isAbleToScan = true;
                     }
                 });
-
+                
                 AlertDialog dialog = mBuilder.create();
 
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -166,16 +167,6 @@ public class CameraScanActivity extends AppCompatActivity {
             }
         });
 
-
-/*
-        myCamera = getCameraInstance();
-        myParameters = myCamera.getParameters();
-        myPreview = new CameraPreview(this, myCamera, myCameraSource, myParameters);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_view);
-        preview.addView(myPreview);
-
-
-        barcodeDetector.setProcessor(barcodeProcessor);*/
     }
 
     public void getProductInformation(final String barcode) {
@@ -300,7 +291,10 @@ public class CameraScanActivity extends AppCompatActivity {
                 //Toast.makeText(this, "Permission GRANDED", Toast.LENGTH_SHORT).show();
                 myCamera = getCameraInstance();
                 myParameters = myCamera.getParameters();
+                myParameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
                 myPreview = new CameraPreview(this, myCamera, myCameraSource, myParameters);
+                myCamera.setParameters(myParameters);
+
                 preview.addView(myPreview);
                 barcodeDetector.setProcessor(barcodeProcessor);
 
@@ -325,6 +319,8 @@ public class CameraScanActivity extends AppCompatActivity {
             }
             c = Camera.open(); // attempt to get a Camera instance
             p = c.getParameters();
+
+
         }
         catch (Exception e){
             // Camera is not available (in use or does not exist)
