@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +33,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
-    private ImageButton addProductButton;
+    private FloatingActionButton addProductButton;
     private ListView productList;
 
     private ProductAdapter productAdapter;
@@ -87,7 +88,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        addProductButton = (ImageButton) findViewById(R.id.add_product);
+        addProductButton = (FloatingActionButton) findViewById(R.id.add_product);
         addProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
