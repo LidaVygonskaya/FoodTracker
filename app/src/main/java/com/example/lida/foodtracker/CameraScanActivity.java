@@ -98,7 +98,7 @@ public class CameraScanActivity extends AppCompatActivity {
         products = new ArrayList<Product>();
 
         barcodeInfo = (ListView) findViewById(R.id.barcodeTextView);
-        arrayAdapter = new ProductAdapter(this, R.layout.list_item, products);
+        arrayAdapter = new ProductAdapter(this, R.layout.product_list_item, products);
 
         barcodeInfo.setAdapter(arrayAdapter);
         barcodeDetector = new BarcodeDetector.Builder(this)

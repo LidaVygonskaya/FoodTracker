@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity {
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
         loadProducts();
-        productAdapter = new ProductAdapter(this, R.layout.list_item, products);
+        productAdapter = new ProductAdapter(this, R.layout.product_list_item, products);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
