@@ -344,8 +344,7 @@ public class CameraScanActivity extends AppCompatActivity {
         product.setName(name.getText().toString());
         ////
         product.setDescription("smth description");
-        ///
-        product.setImgId(R.drawable.fridge);
+        product.setImgId(R.drawable.carrot);
         ///
         productList.add(product.getName());
         descriptions.add(product.getDescription());
