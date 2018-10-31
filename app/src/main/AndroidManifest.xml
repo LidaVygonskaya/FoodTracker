@@ -26,7 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CameraScanActivity" />
+        <activity android:name=".CameraScanActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
@@ -34,10 +35,14 @@
         <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="${HOCKEYAPP_APP_ID}" />
         <!-- To use multiple models: android:value="barcode,model2,model3" -->
         <activity android:name=".SpacesActivity" />
-        <activity android:name=".ShoppingListActivity" />
-        <activity android:name=".RecipesActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".ProductActivity" />
+        <activity android:name=".ShoppingListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RecipesActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ProductActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".BaseActivity"></activity>
     </application>
 

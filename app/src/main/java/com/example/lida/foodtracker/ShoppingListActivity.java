@@ -66,6 +66,7 @@ public class ShoppingListActivity extends BaseActivity {
 
         shoppingListText = findViewById(R.id.add_product_edit_text);
         shoppingListText.setOnFocusChangeListener(onFocusChangeListener);
+        shoppingListText.setOnKeyListener(onEditTextClickListener);
 
         inflater = ShoppingListActivity.this.getLayoutInflater();
 
@@ -81,7 +82,6 @@ public class ShoppingListActivity extends BaseActivity {
         addShoppingListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shoppingListText.setOnKeyListener(onEditTextClickListener);
                 shoppingListText.requestFocus();
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -96,26 +96,28 @@ public class ShoppingListActivity extends BaseActivity {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    View.OnKeyListener onEditTextClickListener = new View.OnKeyListener() {
+    EditText.OnKeyListener onEditTextClickListener = new View.OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 String textProduct = shoppingListText.getText().toString();
                 productList.add(textProduct);
                 adapter.notifyDataSetChanged();
+                shoppingListText.getText().clear();
+                shoppingListText.clearFocus();
                 return true;
             }
             return false;
         }
     };
 
-    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+    EditText.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             if (!hasFocus) {
                 hideKeyboard(v);
-                shoppingListText.setOnKeyListener(null);
-                shoppingListText.getText().clear();
+                //shoppingListText.setOnKeyListener(null);
+
             }
         }
     };
