@@ -69,7 +69,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         TextView extraTxt = (TextView) view.findViewById(R.id.content);
 
         Product product = products.get(position);
-        txtTitle.setText(product.getName());
+        //txtTitle.setText(product.getName());
         imageView.setImageResource(product.getImgId());
 
         Calendar startDate = Calendar.getInstance();
@@ -79,14 +79,18 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         long end = endDate.getTimeInMillis();
 
         Long days = (long) (start - end) / (1000 * 60 * 60 * 24);
-        String dayToEnd;
+        String dayToEnd, title;
         if (days < 0) {
             dayToEnd = getColoredSpanned(days.toString(), "#800000");
+            title = getColoredSpanned(product.getName(), "#800000");
         } else if (days > 5) {
             dayToEnd = getColoredSpanned(days.toString(), "#008000");
+            title = getColoredSpanned(product.getName(), "#008000");
         } else {
-            dayToEnd = getColoredSpanned(days.toString(), "#808000");
+            dayToEnd = getColoredSpanned(days.toString(), "#f28d18");
+            title = getColoredSpanned(product.getName(), "#f28d18");
         }
+        txtTitle.setText(Html.fromHtml(title));
 
         extraTxt.setText(Html.fromHtml("Кол-во: " + product.getQuantity() + "<br/>Годен до: " +
                 product.getDateEnd().getDate() + "." + product.getDateEnd().getMonth() + "." + product.getDateEnd().getYear() +
