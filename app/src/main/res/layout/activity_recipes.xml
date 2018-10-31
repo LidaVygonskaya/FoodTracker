@@ -24,6 +24,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <ImageButton
+        android:id="@+id/settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@null"
+        android:src="@drawable/ic_settings_white_24dp"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar2"
+        app:layout_constraintTop_toTopOf="@+id/toolbar2"
+        />
+
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
