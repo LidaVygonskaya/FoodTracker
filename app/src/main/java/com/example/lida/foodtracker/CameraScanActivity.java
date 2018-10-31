@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.example.lida.foodtracker.Retrofit.App;
 import com.example.lida.foodtracker.Retrofit.Product;
 import com.example.lida.foodtracker.Utils.ProductAdapter;
+import com.example.lida.foodtracker.Utils.ProductComparator;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -47,6 +48,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -67,12 +69,8 @@ public class CameraScanActivity extends AppCompatActivity {
     private Button manualInput;
 
     private ProductAdapter arrayAdapter;
-    private List<String> productList, descriptions;
-    private List<Integer> counts, imgIds;
-    private List<Date> dates;
     private List<Product> products;
     private static final String TAG = "CAMERA_SCAN_ACTIVITY";
-    private ProgressDialog progressDialog;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
     private Camera myCamera;
     private CameraPreview myPreview;
@@ -99,14 +97,8 @@ public class CameraScanActivity extends AppCompatActivity {
 
         products = new ArrayList<Product>();
 
-        productList = new ArrayList<String>();
-        counts = new ArrayList<>();
-        descriptions = new ArrayList<>();
-        dates = new ArrayList<>();
-        imgIds = new ArrayList<>();
-
         barcodeInfo = (ListView) findViewById(R.id.barcodeTextView);
-        arrayAdapter = new ProductAdapter(this, productList, descriptions, counts, dates, imgIds);
+        arrayAdapter = new ProductAdapter(this, R.layout.list_item, products);
 
         barcodeInfo.setAdapter(arrayAdapter);
         barcodeDetector = new BarcodeDetector.Builder(this)
@@ -142,6 +134,7 @@ public class CameraScanActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         createProduct(date, numberPicker, productNameView);
+                        arrayAdapter.sort(new ProductComparator());
                         arrayAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                         isAbleToScan = true;
@@ -203,6 +196,7 @@ public class CameraScanActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             createProduct(date, numberPicker, productNameView);
+                            arrayAdapter.sort(new ProductComparator());
                             arrayAdapter.notifyDataSetChanged();
                             dialog.dismiss();
                             isAbleToScan = true;
@@ -296,10 +290,10 @@ public class CameraScanActivity extends AppCompatActivity {
     }
 
     public void checkButtonVisibility() {
-        if (buttonSave.getVisibility() == View.INVISIBLE && !productList.isEmpty()) {
+        if (buttonSave.getVisibility() == View.INVISIBLE && !products.isEmpty()) {
             buttonSave.setVisibility(View.VISIBLE);
             buttonSaveEmpty.setVisibility(View.INVISIBLE);
-        } else if (productList.isEmpty()) {
+        } else if (products.isEmpty()) {
             buttonSave.setVisibility(View.INVISIBLE);
             buttonSaveEmpty.setVisibility(View.VISIBLE);
         }
@@ -320,17 +314,8 @@ public class CameraScanActivity extends AppCompatActivity {
                     public void run() {
                         isAbleToScan = false;
                         Barcode thisBarcode = (Barcode) barcodes.valueAt(0);
-                        Log.d(TAG, thisBarcode.rawValue);
-                        //Intent intent = new Intent();
-                        //intent.putExtra("barcode", thisBarcode.rawValue);
-                        //productList.add(thisBarcode.rawValue);
-                        //arrayAdapter.notifyDataSetChanged();
                         barcodes.clear();
                         getProductInformation(thisBarcode.rawValue);
-                        //setResult(RESULT_OK, intent);
-
-                        //finish();
-
                     }
                 });
             }
@@ -346,11 +331,6 @@ public class CameraScanActivity extends AppCompatActivity {
         product.setDescription("smth description");
         product.setImgId(R.drawable.carrot);
         ///
-        productList.add(product.getName());
-        descriptions.add(product.getDescription());
-        counts.add(product.getQuantity());
-        dates.add(product.getDateEnd());
-        imgIds.add(product.getImgId());
         products.add(product);
     }
 

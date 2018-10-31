@@ -41,11 +41,7 @@ public class MainActivity extends BaseActivity {
     private ListView productList;
 
     private ProductAdapter productAdapter;
-
-    private List<String> productNames, descriptions;
-    private List<Integer> counts, imgIds;
-    private List<Date> dates;
-    private List<Product> prods;
+    private List<Product> products;
 
     private Toolbar toolbar;
     private SharedPreferences sPref;
@@ -73,24 +69,23 @@ public class MainActivity extends BaseActivity {
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
         loadProducts();
-        productAdapter = new ProductAdapter(this, productNames, descriptions, counts, dates, imgIds);
-        productAdapter.notifyDataSetChanged();
+        productAdapter = new ProductAdapter(this, R.layout.list_item, products);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         productList = (ListView) findViewById(R.id.productList);
         productList.setAdapter(productAdapter);
+
+        productAdapter.sort(new ProductComparator());
+        productAdapter.notifyDataSetChanged();
+
         productList.setEmptyView(findViewById(R.id.empty_group));
         productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
-
-                Product product = new Product(productNames.get(position), descriptions.get(position),
-                        counts.get(position), dates.get(position), imgIds.get(position));
-                intent.putExtra("PRODUCT", product);
-
+                intent.putExtra("PRODUCT", products.get(position));
                 startActivity(intent);
             }
         });
@@ -112,68 +107,45 @@ public class MainActivity extends BaseActivity {
             return;
         }
         Bundle bundle = data.getExtras();
-        List<Product> resultList = (ArrayList<Product>)bundle.getSerializable("BARCODES_LIST");
-        for (Product p:resultList) {
-            productNames.add(p.getName());
-            descriptions.add(p.getDescription());
-            counts.add(p.getQuantity());
-            dates.add(p.getDateEnd());
-            imgIds.add(p.getImgId());
+        List<Product> resultList = (ArrayList<Product>) bundle.getSerializable("BARCODES_LIST");
+        for (Product p : resultList) {
+            products.add(p);
             addProductToSharedPref(p);
         }
+        productAdapter.sort(new ProductComparator());
         productAdapter.notifyDataSetChanged();
         Log.d("a", "as");
     }
 
     private void loadProducts() {
-        productNames = new ArrayList<>();
-        descriptions = new ArrayList<>();
-        counts = new ArrayList<>();
-        dates = new ArrayList<>();
-        imgIds = new ArrayList<>();
+        products = new ArrayList<>();
 
         if (sPref.contains(productsSharedKey)) {
             Gson gson = new Gson();
             String json = sPref.getString(productsSharedKey, null);
             Type type = new TypeToken<ArrayList<Product>>(){}.getType();
             List<Product> prods = gson.fromJson(json, type);
-            //sortProducts(prods);
             for (Product p: prods) {
-                productNames.add(p.getName());
-                descriptions.add(p.getDescription());
-                counts.add(p.getQuantity());
-                dates.add(p.getDateEnd());
-                imgIds.add(p.getImgId());
+                products.add(p);
             }
         }
     }
 
     private void addProductToSharedPref(Product product) {
         Gson gson = new Gson();
-        List<Product> prods;
+        List<Product> products;
         if (sPref.contains(productsSharedKey)){
             String json = sPref.getString(productsSharedKey, null);
             Type type = new TypeToken<ArrayList<Product>>(){}.getType();
-            prods = gson.fromJson(json, type);
-
-
+            products = gson.fromJson(json, type);
         } else {
-            prods = new ArrayList<Product>();
-            Log.d(TAG, "NET NICHEGO V SHARED PREFS");
+            products = new ArrayList<Product>();
         }
-        prods.add(product);
+        products.add(product);
         SharedPreferences.Editor editor = sPref.edit();
-        String json = gson.toJson(prods);
+        String json = gson.toJson(products);
         editor.putString(productsSharedKey, json);
         editor.apply();
     }
 
-   /* @SuppressLint("NewApi")
-    private void sortProducts(List<Product> prod) {
-        Log.d(TAG, "Представь что я отсортировался");
-        /* Не работает разберись почему
-        NoClassDefFoundError
-        prod.sort(Comparator.comparing(Product::getDateEnd));
-        */
-    //}
 }

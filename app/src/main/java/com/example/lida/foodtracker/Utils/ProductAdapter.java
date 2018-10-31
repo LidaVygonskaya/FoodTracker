@@ -19,34 +19,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.zip.Inflater;
 
-public class ProductAdapter extends BaseAdapter {
+public class ProductAdapter extends ArrayAdapter<Product> {
     private final Context context;
-    private final List<String> productNames, descriptions;
-    private final List<Integer> counts;
-    private final List<Date> dates;
-    private final List<Integer> imageIds;
+
+    private final List<Product> products;
     private LayoutInflater layoutInflater;
 
-    public ProductAdapter(Context context, List<String> productNames, List<String> descriptions,
-                          List<Integer> counts, List<Date> dates,
-                          List<Integer> imageIds) {
+    public ProductAdapter(Context context, int textViewResourceId, List<Product> products) {
+        super(context, textViewResourceId, products);
         this.context = context;
-        this.productNames = productNames;
-        this.descriptions = descriptions;
-        this.counts = counts;
-        this.dates = dates;
-        this.imageIds = imageIds;
+        this.products = products;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return productNames.size();
+        return products.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return position;
+    public Product getItem(int position) {
+        return products.get(position);
     }
 
     @Override
@@ -65,28 +58,11 @@ public class ProductAdapter extends BaseAdapter {
         ImageView imageView = (ImageView) view.findViewById(R.id.icon);
         TextView extratxt = (TextView) view.findViewById(R.id.textView1);
 
-        txtTitle.setText(productNames.get(position));
-        imageView.setImageResource(imageIds.get(position));
-        extratxt.setText(descriptions.get(position) + "\nКол-во: " + counts.get(position) +
-                "\nДо: " + dates.get(position).getDate() + "." + dates.get(position).getMonth() + "." + dates.get(position).getYear());
+        Product product = products.get(position);
+        txtTitle.setText(product.getName());
+        imageView.setImageResource(product.getImgId());
+        extratxt.setText(product.getDescription() + "\nКол-во: " + product.getQuantity() +
+                        "\nДо: " + product.getDateEnd().getDate() + "." + product.getDateEnd().getMonth() + "." + product.getDateEnd().getYear());
         return view;
-
     }
-
-    public void sort(Comparator<Product> comparator) {
-
-    }
-
-    @Override
-    public void notifyDataSetChanged() {
-        this.sort(new Comparator<Product>() {
-            @Override
-            public int compare(Product p1, Product p2) {
-                return p1.getDateEnd().compareTo(p2.getDateEnd());
-            }
-        });
-
-        super.notifyDataSetChanged();
-    }
-
-    }
+}
