@@ -15,9 +15,4 @@
         android:title="@string/recipes"
         android:icon="@drawable/ic_room_service_black_24dp"/>
 
-    <item
-        android:id="@+id/settings"
-        android:title="@string/settings"
-        android:icon="@drawable/ic_settings_black_24dp"/>
-
 </menu>
