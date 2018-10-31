@@ -2,6 +2,13 @@ package com.example.lida.foodtracker.Utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.provider.CalendarContract;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +20,13 @@ import android.widget.TextView;
 import com.example.lida.foodtracker.R;
 import com.example.lida.foodtracker.Retrofit.Product;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.Inflater;
 
 public class ProductAdapter extends ArrayAdapter<Product> {
@@ -56,13 +66,36 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
         TextView txtTitle = (TextView) view.findViewById(R.id.item);
         ImageView imageView = (ImageView) view.findViewById(R.id.icon);
-        TextView extratxt = (TextView) view.findViewById(R.id.textView1);
+        TextView extraTxt = (TextView) view.findViewById(R.id.content);
 
         Product product = products.get(position);
         txtTitle.setText(product.getName());
         imageView.setImageResource(product.getImgId());
-        extratxt.setText(product.getDescription() + "\nКол-во: " + product.getQuantity() +
-                        "\nДо: " + product.getDateEnd().getDate() + "." + product.getDateEnd().getMonth() + "." + product.getDateEnd().getYear());
+
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(product.getDateEnd().getYear(), product.getDateEnd().getMonth(), product.getDateEnd().getDate());
+        long start = startDate.getTimeInMillis();
+        Calendar endDate = Calendar.getInstance();
+        long end = endDate.getTimeInMillis();
+
+        Long days = (long) (start - end) / (1000 * 60 * 60 * 24);
+        String dayToEnd;
+        if (days < 0) {
+            dayToEnd = getColoredSpanned(days.toString(), "#800000");
+        } else if (days > 5) {
+            dayToEnd = getColoredSpanned(days.toString(), "#008000");
+        } else {
+            dayToEnd = getColoredSpanned(days.toString(), "#808000");
+        }
+
+        extraTxt.setText(Html.fromHtml("Кол-во: " + product.getQuantity() + "<br/>Годен до: " +
+                product.getDateEnd().getDate() + "." + product.getDateEnd().getMonth() + "." + product.getDateEnd().getYear() +
+                "<br/>Осталось дней: " + dayToEnd));
         return view;
     }
+
+    private String getColoredSpanned(String text, String color) {
+        return "<font color=" + color + "><b>" + text + "<b></font>";
+    }
+
 }
