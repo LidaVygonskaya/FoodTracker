@@ -5,12 +5,12 @@
     android:orientation="horizontal"
     android:background="@android:color/transparent">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/icon"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:padding="5dp"
-        android:src="@drawable/fridge_close"
+        android:src="@drawable/carrot"
         android:background="@android:color/transparent"
         />
 
