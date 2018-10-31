@@ -73,20 +73,7 @@ public class MainActivity extends BaseActivity {
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
         loadProducts();
-        prods = new ArrayList<>();
-        for (int i = 0; i < productNames.size(); i++) {
-            Product prod = new Product(productNames.get(i), descriptions.get(i),
-                    counts.get(i), dates.get(i), imgIds.get(i));
-            prods.add(prod);
-        }
-        Collections.sort(prods, new ProductComparator());
         productAdapter = new ProductAdapter(this, productNames, descriptions, counts, dates, imgIds);
-        productAdapter.sort(new Comparator<Product>() {
-            @Override
-            public int compare(Product pr0, Product pr1) {
-                return pr0.getDateEnd().compareTo(pr1.getDateEnd());
-            }
-        });
         productAdapter.notifyDataSetChanged();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
