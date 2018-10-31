@@ -23,12 +23,14 @@ import android.support.v7.widget.Toolbar;
 
 import com.example.lida.foodtracker.Retrofit.Product;
 import com.example.lida.foodtracker.Utils.ProductAdapter;
+import com.example.lida.foodtracker.Utils.ProductComparator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +45,8 @@ public class MainActivity extends BaseActivity {
     private List<String> productNames, descriptions;
     private List<Integer> counts, imgIds;
     private List<Date> dates;
+    private List<Product> prods;
+
     private Toolbar toolbar;
     private SharedPreferences sPref;
     private String productsSharedKey = "Products";
@@ -69,17 +73,26 @@ public class MainActivity extends BaseActivity {
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
         loadProducts();
+        prods = new ArrayList<>();
+        for (int i = 0; i < productNames.size(); i++) {
+            Product prod = new Product(productNames.get(i), descriptions.get(i),
+                    counts.get(i), dates.get(i), imgIds.get(i));
+            prods.add(prod);
+        }
+        Collections.sort(prods, new ProductComparator());
         productAdapter = new ProductAdapter(this, productNames, descriptions, counts, dates, imgIds);
+        productAdapter.sort(new Comparator<Product>() {
+            @Override
+            public int compare(Product pr0, Product pr1) {
+                return pr0.getDateEnd().compareTo(pr1.getDateEnd());
+            }
+        });
+        productAdapter.notifyDataSetChanged();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.bottomMargin = toolbar.getHeight();
-        layoutParams.topMargin = bottomNavigation.getHeight();
-*/
         productList = (ListView) findViewById(R.id.productList);
-  //      productList.setLayoutParams(layoutParams);
         productList.setAdapter(productAdapter);
         productList.setEmptyView(findViewById(R.id.empty_group));
         productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -137,7 +150,7 @@ public class MainActivity extends BaseActivity {
             String json = sPref.getString(productsSharedKey, null);
             Type type = new TypeToken<ArrayList<Product>>(){}.getType();
             List<Product> prods = gson.fromJson(json, type);
-            sortProducts(prods);
+            //sortProducts(prods);
             for (Product p: prods) {
                 productNames.add(p.getName());
                 descriptions.add(p.getDescription());
@@ -168,12 +181,12 @@ public class MainActivity extends BaseActivity {
         editor.apply();
     }
 
-    @SuppressLint("NewApi")
+   /* @SuppressLint("NewApi")
     private void sortProducts(List<Product> prod) {
         Log.d(TAG, "Представь что я отсортировался");
         /* Не работает разберись почему
         NoClassDefFoundError
         prod.sort(Comparator.comparing(Product::getDateEnd));
         */
-    }
+    //}
 }

@@ -23,14 +23,6 @@ public class Product implements Serializable{
     @SerializedName("composition")
     private String composition;
 
-    //@SerializedName("date_end")
-    private Integer dayEnd;
-
-    private Integer yearEnd;
-
-    private Integer monthEnd;
-
-    //@SerializedName("quantity")
     private Integer quantity;
 
     private Date dateEnd;
@@ -86,27 +78,9 @@ public class Product implements Serializable{
         this.composition = composition;
     }
 
-    public void setData(DatePicker datePicker) {
-        this.dayEnd = datePicker.getDayOfMonth();
-        this.monthEnd = datePicker.getMonth();
-        this.yearEnd = datePicker.getYear();
-    }
+    public void setDateEnd(Date dateEnd) { this.dateEnd = dateEnd; }
 
-    public Map<String, Integer> getData() {
-        Map<String, Integer> data = new HashMap<>();
-        data.put("day", this.dayEnd);
-        data.put("month", this.monthEnd);
-        data.put("year", this.yearEnd);
-        return data;
-    }
-
-    public void setDateEnd() {
-        this.dateEnd = new Date(this.yearEnd, this.monthEnd, this.dayEnd);
-    }
-
-    public Date getDateEnd() {
-        return dateEnd;
-    }
+    public Date getDateEnd() { return dateEnd; }
 
     public Integer getQuantity() { return quantity; }
 

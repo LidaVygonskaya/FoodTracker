@@ -11,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lida.foodtracker.R;
+import com.example.lida.foodtracker.Retrofit.Product;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.Inflater;
@@ -69,6 +71,22 @@ public class ProductAdapter extends BaseAdapter {
                 "\nДо: " + dates.get(position).getDate() + "." + dates.get(position).getMonth() + "." + dates.get(position).getYear());
         return view;
 
-    };
+    }
 
-}
+    public void sort(Comparator<Product> comparator) {
+
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        this.sort(new Comparator<Product>() {
+            @Override
+            public int compare(Product p1, Product p2) {
+                return p1.getDateEnd().compareTo(p2.getDateEnd());
+            }
+        });
+
+        super.notifyDataSetChanged();
+    }
+
+    }
