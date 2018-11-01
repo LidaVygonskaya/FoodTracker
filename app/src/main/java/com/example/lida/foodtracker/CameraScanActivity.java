@@ -123,10 +123,10 @@ public class CameraScanActivity extends AppCompatActivity {
 
                 final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
                 final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
-                final NumberPicker numberPicker = (NumberPicker) v.findViewById(R.id.numberPicker);
-                numberPicker.setMaxValue(100);
-                numberPicker.setMinValue(1);
-                numberPicker.setWrapSelectorWheel(false);
+                final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
+                //numberPicker.setMaxValue(100);
+                //numberPicker.setMinValue(1);
+                //numberPicker.setWrapSelectorWheel(false);
 
                 mBuilder.setView(v);
 
@@ -185,10 +185,10 @@ public class CameraScanActivity extends AppCompatActivity {
                     final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
                     productNameView.setText(product.getName());
                     final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
-                    final NumberPicker numberPicker = (NumberPicker) v.findViewById(R.id.numberPicker);
-                    numberPicker.setMaxValue(100);
-                    numberPicker.setMinValue(1);
-                    numberPicker.setWrapSelectorWheel(false);
+                    final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
+                    //numberPicker.setMaxValue(100);
+                    //numberPicker.setMinValue(1);
+                    //numberPicker.setWrapSelectorWheel(false);
 
                     mBuilder.setView(v);
 
@@ -322,10 +322,10 @@ public class CameraScanActivity extends AppCompatActivity {
         }
     };
 
-    public void createProduct(DatePicker date, NumberPicker quantity, EditText name) {
+    public void createProduct(DatePicker date, EditText quantity, EditText name) {
         Product product = new Product();
         product.setDateEnd(new Date(date.getYear(), date.getMonth(), date.getDayOfMonth()));
-        product.setQuantity(quantity.getValue());
+        product.setQuantity(Integer.parseInt(quantity.getText().toString()));
         product.setName(name.getText().toString());
         ////
         product.setDescription("smth description");

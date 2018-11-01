@@ -10,10 +10,11 @@
     <string name="my_fridges">Мой холодильник</string>
     <string name="CameraScanActivity">Добавить продукт</string>
     <string name="add_recipe">Добавление рецепт</string>
-    <string name="enter_product_name">Введите имя продукта</string>
+    <string name="enter_product_name">Название продукта</string>
     <string name="fridge_empty">Кажется ваш холодильник пуст! Начните добавлять продукты :)</string>
     <string name="shopping_list_empty">Здесь пусто! Начните добавлять продукты :)</string>
     <string name="recipes_list_empty">Здесь пусто! Начните добавлять рецепты :)</string>
     <string name="quantity">Количество</string>
+
 
 </resources>
