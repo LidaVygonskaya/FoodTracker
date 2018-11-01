@@ -96,12 +96,11 @@ public class MainActivity extends BaseActivity {
                                 products.remove(position);
                                 productAdapter.notifyDataSetChanged();
 
+                                Gson gson = new Gson();
                                 SharedPreferences.Editor editor = sPref.edit();
-                                editor.clear();
-                                editor.commit();
-                                for (Product p : products) {
-                                    addProductToSharedPref(p);
-                                }
+                                String json = gson.toJson(products);
+                                editor.putString(productsSharedKey, json);
+                                editor.apply();
 
                                 dialog.dismiss();
                             }
