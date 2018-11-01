@@ -113,7 +113,7 @@ public class CameraScanActivity extends AppCompatActivity {
         manualInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final LayoutInflater inflater = CameraScanActivity.this.getLayoutInflater();
+                final  LayoutInflater inflater = CameraScanActivity.this.getLayoutInflater();
                 v = inflater.inflate(R.layout.add_product, null);
 
                 //Dialog for

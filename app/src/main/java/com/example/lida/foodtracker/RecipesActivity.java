@@ -1,25 +1,22 @@
 package com.example.lida.foodtracker;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.lida.foodtracker.Retrofit.Product;
-import com.example.lida.foodtracker.Retrofit.Recept;
+import com.example.lida.foodtracker.Retrofit.Recipe;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,35 +32,41 @@ public class RecipesActivity extends BaseActivity {
         return R.id.recipes;
     }
 
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> recipesList;
+    private ArrayAdapter<Recipe> adapter;
+    private ArrayList<Recipe> recipesList;
     private ListView recipes;
 
     private LayoutInflater inflater;
     private FloatingActionButton addRecipesButton;
+
+    private SharedPreferences sPref;
+    private String recipesSharedKey = "Recipe";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
 
+        sPref = getPreferences(MODE_PRIVATE);
+
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
-        recipesList = new ArrayList<>();
+        loadRecipes();
 
-        adapter = new ArrayAdapter<String>(this, R.layout.add_recept, recipesList);
+        adapter = new ArrayAdapter<Recipe>(this, R.layout.add_recipe, recipesList);
 
         recipes = (ListView) findViewById(R.id.recipes_list);
         recipes.setAdapter(adapter);
         recipes.setEmptyView(findViewById(R.id.empty_group));
 
-        addRecipesButton = (FloatingActionButton) findViewById(R.id.add_recept);
+        addRecipesButton = (FloatingActionButton) findViewById(R.id.add_recipe);
         addRecipesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(getApplicationContext(), ReceptAdding.class);
-                //startActivityForResult(intent, 1);
+                //Intent intent = new Intent(getApplicationContext(), RecipeAdding.class);
+//                startActivity(intent);
+                //             startActivityForResult(intent, 1);
             }
         });
     }
@@ -74,7 +77,41 @@ public class RecipesActivity extends BaseActivity {
             return;
         }
         Bundle bundle = data.getExtras();
-        List<Recept> resultList = (ArrayList<Recept>)bundle.getSerializable("RECEPT");
-        //TODO
+        Recipe result = (Recipe)bundle.getSerializable("RECIPE");
+        recipesList.add(result);
+        adapter.notifyDataSetChanged();
+        addRecipeToSharedPref(result);
     }
+
+    private void loadRecipes() {
+        recipesList = new ArrayList<>();
+
+        if (sPref.contains(recipesSharedKey)) {
+            Gson gson = new Gson();
+            String json = sPref.getString(recipesSharedKey, null);
+            Type type = new TypeToken<ArrayList<Product>>(){}.getType();
+            List<Recipe> recs = gson.fromJson(json, type);
+            for (Recipe r: recs) {
+                recipesList.add(r);
+            }
+        }
+    }
+
+    private void addRecipeToSharedPref(Recipe recipe) {
+        Gson gson = new Gson();
+        List<Recipe> recipes;
+        if (sPref.contains(recipesSharedKey)){
+            String json = sPref.getString(recipesSharedKey, null);
+            Type type = new TypeToken<ArrayList<Product>>(){}.getType();
+            recipes = gson.fromJson(json, type);
+        } else {
+            recipes = new ArrayList<Recipe>();
+        }
+        recipes.add(recipe);
+        SharedPreferences.Editor editor = sPref.edit();
+        String json = gson.toJson(recipes);
+        editor.putString(recipesSharedKey, json);
+        editor.apply();
+    }
+
 }

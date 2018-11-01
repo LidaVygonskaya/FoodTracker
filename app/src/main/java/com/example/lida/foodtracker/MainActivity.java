@@ -1,6 +1,9 @@
 package com.example.lida.foodtracker;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -9,6 +12,7 @@ import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,6 +85,38 @@ public class MainActivity extends BaseActivity {
         productAdapter.notifyDataSetChanged();
 
         productList.setEmptyView(findViewById(R.id.empty_group));
+        productList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Удалить объект " + products.get(position).getName() + "?")
+                        .setPositiveButton("Удалить", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                products.remove(position);
+                                productAdapter.notifyDataSetChanged();
+
+                                SharedPreferences.Editor editor = sPref.edit();
+                                editor.clear();
+                                editor.commit();
+                                for (Product p : products) {
+                                    addProductToSharedPref(p);
+                                }
+
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create().show();
+
+                return true;
+            }
+        });
         productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
