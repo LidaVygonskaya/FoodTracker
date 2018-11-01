@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tittle"
                     android:layout_marginTop="6dp"
-                    android:text="Самая грустная морковка на змеле. Заслуживает того, чтобы ее любили.
+                    android:text="Самая грустная морковка на земле. Заслуживает того, чтобы ее любили.
 Сварите из нее суп. Она будет задумчиво сидеть в нем и думать о вашей жизни." />
             </RelativeLayout>
 

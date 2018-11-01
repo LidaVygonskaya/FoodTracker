@@ -141,19 +141,33 @@ public class MainActivity extends BaseActivity {
         if (data == null) {
             return;
         }
+
         Bundle bundle = data.getExtras();
-        List<Product> resultList = (ArrayList<Product>) bundle.getSerializable("BARCODES_LIST");
+        if (bundle == null) {
+            return;
+        }
+        List<Product> resultList = (ArrayList<Product>) bundle.getSerializable("PRODUCT_LIST");
+
         for (Product p : resultList) {
             products.add(p);
             addProductToSharedPref(p);
         }
+
         productAdapter.sort(new ProductComparator());
         productAdapter.notifyDataSetChanged();
-        Log.d("a", "as");
     }
 
     private void loadProducts() {
         products = new ArrayList<>();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            List<Product> resultList = (ArrayList<Product>) bundle.getSerializable("PRODUCT_LIST");
+
+            for (Product p : resultList) {
+                addProductToSharedPref(p);
+            }
+        }
 
         if (sPref.contains(productsSharedKey)) {
             Gson gson = new Gson();

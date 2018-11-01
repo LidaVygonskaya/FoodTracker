@@ -124,9 +124,6 @@ public class CameraScanActivity extends AppCompatActivity {
                 final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
                 final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                 final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
-                //numberPicker.setMaxValue(100);
-                //numberPicker.setMinValue(1);
-                //numberPicker.setWrapSelectorWheel(false);
 
                 mBuilder.setView(v);
 
@@ -134,8 +131,6 @@ public class CameraScanActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         createProduct(date, numberPicker, productNameView);
-                        arrayAdapter.sort(new ProductComparator());
-                        arrayAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                         isAbleToScan = true;
                         checkButtonVisibility();
@@ -186,9 +181,6 @@ public class CameraScanActivity extends AppCompatActivity {
                     productNameView.setText(product.getName());
                     final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                     final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
-                    //numberPicker.setMaxValue(100);
-                    //numberPicker.setMinValue(1);
-                    //numberPicker.setWrapSelectorWheel(false);
 
                     mBuilder.setView(v);
 
@@ -196,8 +188,6 @@ public class CameraScanActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             createProduct(date, numberPicker, productNameView);
-                            arrayAdapter.sort(new ProductComparator());
-                            arrayAdapter.notifyDataSetChanged();
                             dialog.dismiss();
                             isAbleToScan = true;
                             checkButtonVisibility();
@@ -332,6 +322,8 @@ public class CameraScanActivity extends AppCompatActivity {
         product.setImgId(R.drawable.carrot);
         ///
         products.add(product);
+        arrayAdapter.sort(new ProductComparator());
+        arrayAdapter.notifyDataSetChanged();
     }
 
     View.OnClickListener saveListener = new View.OnClickListener() {
@@ -340,7 +332,7 @@ public class CameraScanActivity extends AppCompatActivity {
 
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("BARCODES_LIST", (Serializable) products);//Список продуктов
+            bundle.putSerializable("PRODUCT_LIST", (Serializable) products);//Список продуктов
             intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
             finish();

@@ -38,8 +38,7 @@
         android:background="@null"
         android:src="@drawable/ic_settings_white_24dp"
         app:layout_constraintEnd_toEndOf="@+id/toolbar2"
-        app:layout_constraintTop_toTopOf="@+id/toolbar2"
-        />
+        app:layout_constraintTop_toTopOf="@+id/toolbar2" />
 
     <TextView
         android:id="@+id/title"
@@ -60,8 +59,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
+        android:choiceMode="multipleChoice"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/add_product_edit_text"
         app:layout_constraintVertical_bias="0.0"
@@ -76,11 +75,26 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:clickable="true"
+        android:focusable="true"
+        android:scaleType="center"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_add_white_24dp"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/save_products"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:clickable="true"
+        android:focusable="true"
         android:scaleType="center"
-        android:focusable="true"/>
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_kitchen_black_24dp"/>
 
     <ImageView
         android:id="@+id/empty"
@@ -110,9 +124,9 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:gravity="center"
         android:text="@string/shopping_list_empty"
         android:textSize="16dp"
-        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/empty"
@@ -127,7 +141,7 @@
     <EditText
         android:id="@+id/add_product_edit_text"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
@@ -136,13 +150,12 @@
         android:layout_marginTop="16dp"
         android:background="@android:color/background_light"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Продукт"
+        android:inputType="textPersonName"
         android:paddingLeft="8dp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
         android:singleLine="true"/>
 </android.support.constraint.ConstraintLayout>
 
