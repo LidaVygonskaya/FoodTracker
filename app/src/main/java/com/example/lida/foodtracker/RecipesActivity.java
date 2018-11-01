@@ -56,9 +56,7 @@ public class RecipesActivity extends BaseActivity {
 
         adapter = new ArrayAdapter<Recipe>(this, R.layout.add_recipe, recipesList);
 
-        recipes = (ListView) findViewById(R.id.recipes_list);
-        recipes.setAdapter(adapter);
-        recipes.setEmptyView(findViewById(R.id.empty_group));
+
 
         addRecipesButton = (FloatingActionButton) findViewById(R.id.add_recipe);
         addRecipesButton.setOnClickListener(new View.OnClickListener() {
