@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -127,19 +128,18 @@ public class CameraScanActivity extends AppCompatActivity {
                 final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                 final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
                 final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
-                ArrayAdapter<?> adapter =
-                        ArrayAdapter.createFromResource(getApplicationContext(), R.array.quantity_choise, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner.setAdapter(adapter);
+                ArrayAdapter<?> adapterSpinner = ArrayAdapter.createFromResource(getApplicationContext(),
+                        R.array.quantity_choise, android.R.layout.simple_spinner_item);
+                adapterSpinner.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+                spinner.setAdapter(adapterSpinner);
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        parent.setSelection(position);
+                        ((TextView) view).setTextColor(Color.BLACK);
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-                        parent.setSelection(0);
                     }
                 });
                 mBuilder.setView(v);
@@ -199,19 +199,18 @@ public class CameraScanActivity extends AppCompatActivity {
                     final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                     final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
                     final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
-                    ArrayAdapter<?> adapter =
-                            ArrayAdapter.createFromResource(getApplicationContext(), R.array.quantity_choise, android.R.layout.simple_spinner_item);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner.setAdapter(adapter);
+                    ArrayAdapter<?> adapterSpinner = ArrayAdapter.createFromResource(getApplicationContext(),
+                            R.array.quantity_choise, android.R.layout.simple_spinner_item);
+                    adapterSpinner.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+                    spinner.setAdapter(adapterSpinner);
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            parent.setSelection(position);
+                            ((TextView) view).setTextColor(Color.BLACK);
                         }
 
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
-                            parent.setSelection(0);
                         }
                     });
 

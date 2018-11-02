@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
@@ -101,127 +102,72 @@ public class ShoppingListActivity extends BaseActivity {
         shoppingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*new AlertDialog.Builder(ShoppingListActivity.this)
-                        .setTitle("Удалить объект " + productList.get(position) + "?")
-                        .setPositiveButton("Удалить", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                productList.remove(position);
-                                adapter.notifyDataSetChanged();
-
-                                Gson gson = new Gson();
-                                SharedPreferences.Editor editor = sPref.edit();
-                                String json = gson.toJson(productList);
-                                editor.putString(shoppingListSharedKey, json);
-                                editor.apply();
-
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create().show();*/
-
-                    SparseBooleanArray chosen = ((ListView) parent).getCheckedItemPositions();
-
-                }
-        });
-
-        shoppingList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final LayoutInflater inflater = ShoppingListActivity.this.getLayoutInflater();
                 View v = inflater.inflate(R.layout.add_product, null);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListActivity.this);
-                builder.setTitle("Добавить продукт \"" + productList.get(position) + "\" в холодильник?");
-                builder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(ShoppingListActivity.this);
+
+                mBuilder.setTitle("Добавление продукта в холодильник");
+
+                final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
+                productNameView.setText(productList.get(position));
+                final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
+                final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
+                final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
+                ArrayAdapter<?> adapterSpinner = ArrayAdapter.createFromResource(getApplicationContext(),
+                        R.array.quantity_choise, android.R.layout.simple_spinner_item);
+                adapterSpinner.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+                spinner.setAdapter(adapterSpinner);
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(ShoppingListActivity.this);
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        ((TextView) view).setTextColor(Color.BLACK);
+                    }
 
-                        mBuilder.setTitle("Добавление продукта");
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                });
 
-                        final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
-                        productNameView.setText(productList.get(position));
-                        final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
-                        final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
-                        final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
-                        ArrayAdapter<?> adapter =
-                                ArrayAdapter.createFromResource(getApplicationContext(), R.array.quantity_choise, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
-                        spinner.setAdapter(adapter);
-                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                parent.setSelection(position);
-                                adapter.notifyDataSetChanged();
-                            }
+                mBuilder.setView(v);
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-                                parent.setSelection(0);
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-
-                        mBuilder.setView(v);
-
-                        mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog1, int which) {
-                                Product product = new Product();
-                                product.setDateEnd(new Date(date.getYear(), date.getMonth(), date.getDayOfMonth()));
-                                product.setQuantity(Double.parseDouble(numberPicker.getText().toString()));
-                                product.setName(productNameView.getText().toString());
-                                product.setQuantityChoise(spinner.getSelectedItem().toString());
+                mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog1, int which) {
+                        Product product = new Product();
+                        product.setDateEnd(new Date(date.getYear(), date.getMonth(), date.getDayOfMonth()));
+                        product.setQuantity(Double.parseDouble(numberPicker.getText().toString()));
+                        product.setName(productNameView.getText().toString());
+                        product.setQuantityChoise(spinner.getSelectedItem().toString());
                                 ////
-                                product.setDescription("smth description");
-                                product.setImgId(R.drawable.carrot);
+                        product.setDescription("smth description");
+                        product.setImgId(R.drawable.carrot);
 
-                                products.add(product);
+                        products.add(product);
+                        saveProductsButton.setVisibility(View.VISIBLE);
 
-                                saveProductsButton.setVisibility(View.VISIBLE);
+                        productList.remove(position);
+                        adapter.notifyDataSetChanged();
 
-                                productList.remove(position);
-                                adapter.notifyDataSetChanged();
+                        Gson gson = new Gson();
+                        SharedPreferences.Editor editor = sPref.edit();
+                        String json = gson.toJson(productList);
+                        editor.putString(shoppingListSharedKey, json);
+                        editor.apply();
 
-                                Gson gson = new Gson();
-                                SharedPreferences.Editor editor = sPref.edit();
-                                String json = gson.toJson(productList);
-                                editor.putString(shoppingListSharedKey, json);
-                                editor.apply();
-
-                                dialog1.dismiss();
-                                dialog.dismiss();
-                            }
-                        });
-
-                        mBuilder.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog1, int which) {
-                                dialog1.dismiss();
-                                dialog.dismiss();
-                            }
-                        });
-
-                        AlertDialog dialogProduct = mBuilder.create();
-                        dialogProduct.show();
+                        dialog1.dismiss();
                     }
                 });
-                builder.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
+
+                mBuilder.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                    public void onClick(DialogInterface dialog1, int which) {
+                        dialog1.dismiss();
                     }
                 });
-                builder.create().show();
 
-                return true;
+                AlertDialog dialogProduct = mBuilder.create();
+                dialogProduct.show();
             }
         });
 
