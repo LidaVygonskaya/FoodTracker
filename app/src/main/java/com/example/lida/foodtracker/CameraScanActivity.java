@@ -126,14 +126,28 @@ public class CameraScanActivity extends AppCompatActivity {
                 final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
                 final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                 final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
-                final Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
+                ArrayAdapter<?> adapter =
+                        ArrayAdapter.createFromResource(getApplicationContext(), R.array.quantity_choise, android.R.layout.simple_spinner_item);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapter);
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        parent.setSelection(position);
+                    }
 
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        parent.setSelection(0);
+                    }
+                });
                 mBuilder.setView(v);
 
                 mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        createProduct(date, numberPicker, productNameView, /*spinner.getSelectedItem().toString()*/"шт");
+                        createProduct(date, numberPicker, productNameView, spinner.getSelectedItem().toString());
                         dialog.dismiss();
                         isAbleToScan = true;
                         checkButtonVisibility();
@@ -184,18 +198,29 @@ public class CameraScanActivity extends AppCompatActivity {
                     productNameView.setText(product.getName());
                     final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                     final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
-                    final Spinner spinner = (Spinner) findViewById(R.id.spinner);
-                    /*ArrayAdapter<?> adapter =
+                    final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
+                    ArrayAdapter<?> adapter =
                             ArrayAdapter.createFromResource(getApplicationContext(), R.array.quantity_choise, android.R.layout.simple_spinner_item);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner.setAdapter(adapter);*/
+                    spinner.setAdapter(adapter);
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            parent.setSelection(position);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                            parent.setSelection(0);
+                        }
+                    });
 
                     mBuilder.setView(v);
 
                     mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            createProduct(date, numberPicker, productNameView, /*spinner.getSelectedItem().toString()*/"шт");
+                            createProduct(date, numberPicker, productNameView, spinner.getSelectedItem().toString());
                             dialog.dismiss();
                             isAbleToScan = true;
                             checkButtonVisibility();

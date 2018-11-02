@@ -23,7 +23,9 @@ public class Product implements Serializable{
     @SerializedName("composition")
     private String composition;
 
-    private Integer quantity;
+    private Double quantity;
+
+    private String quantityChoise;
 
     private Date dateEnd;
 
@@ -31,10 +33,11 @@ public class Product implements Serializable{
 
     public Product() {}
 
-    public Product(String name, String description, Integer count, Date date, Integer imgId) {
+    public Product(String name, String description, Double count, String quantityChoise, Date date, Integer imgId) {
         this.name = name;
         this.description = description;
         this.quantity = count;
+        this.quantityChoise = quantityChoise;
         this.dateEnd = date;
         this.imgId = imgId;
     }
@@ -82,9 +85,13 @@ public class Product implements Serializable{
 
     public Date getDateEnd() { return dateEnd; }
 
-    public Integer getQuantity() { return quantity; }
+    public Double getQuantity() { return quantity; }
 
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public void setQuantity(Double quantity) { this.quantity = quantity; }
+
+    public String getQuantityChoise() { return quantityChoise; }
+
+    public void setQuantityChoise(String quantityChoise) { this.quantityChoise = quantityChoise; }
 
     public void setImgId(Integer imgId) { this.imgId = imgId; }
 

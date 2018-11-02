@@ -69,7 +69,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         TextView extraTxt = (TextView) view.findViewById(R.id.content);
 
         Product product = products.get(position);
-        //txtTitle.setText(product.getName());
+        txtTitle.setText(product.getName());
         imageView.setImageResource(product.getImgId());
 
         Calendar startDate = Calendar.getInstance();
@@ -92,7 +92,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         }
         txtTitle.setText(Html.fromHtml(title));
 
-        extraTxt.setText(Html.fromHtml("Кол-во: " + product.getQuantity() + "<br/>Годен до: " +
+        extraTxt.setText(Html.fromHtml("Кол-во: " + product.getQuantity() + " " + product.getQuantityChoise() + "<br/>Годен до: " +
                 product.getDateEnd().getDate() + "." + product.getDateEnd().getMonth() + "." + product.getDateEnd().getYear() +
                 "<br/>Осталось дней: " + dayToEnd));
         return view;

@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lida.foodtracker.Retrofit.Product;
 import com.example.lida.foodtracker.Utils.ProductAdapter;
@@ -148,7 +150,24 @@ public class ShoppingListActivity extends BaseActivity {
                         productNameView.setText(productList.get(position));
                         final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                         final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
-                        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                        final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
+                        ArrayAdapter<?> adapter =
+                                ArrayAdapter.createFromResource(getApplicationContext(), R.array.quantity_choise, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+                        spinner.setAdapter(adapter);
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                parent.setSelection(position);
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                                parent.setSelection(0);
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
 
                         mBuilder.setView(v);
 
@@ -159,7 +178,7 @@ public class ShoppingListActivity extends BaseActivity {
                                 product.setDateEnd(new Date(date.getYear(), date.getMonth(), date.getDayOfMonth()));
                                 product.setQuantity(Double.parseDouble(numberPicker.getText().toString()));
                                 product.setName(productNameView.getText().toString());
-                                product.setQuantityChoise(/*spinner.getSelectedItem().toString()*/"шт");
+                                product.setQuantityChoise(spinner.getSelectedItem().toString());
                                 ////
                                 product.setDescription("smth description");
                                 product.setImgId(R.drawable.carrot);
