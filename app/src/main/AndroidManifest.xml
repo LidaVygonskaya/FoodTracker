@@ -37,7 +37,7 @@
         <activity android:name=".SpacesActivity" />
         <activity android:name=".ShoppingListActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".RecipesActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".SettingsActivity"

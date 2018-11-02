@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -127,6 +128,8 @@ public class CameraScanActivity extends AppCompatActivity {
                 final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
                 final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                 final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
+                numberPicker.setOnFocusChangeListener(onFocusChangeListener);
+                numberPicker.setOnKeyListener(onEditTextClickListener);
                 final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
                 ArrayAdapter<?> adapterSpinner = ArrayAdapter.createFromResource(getApplicationContext(),
                         R.array.quantity_choise, android.R.layout.simple_spinner_item);
@@ -198,6 +201,8 @@ public class CameraScanActivity extends AppCompatActivity {
                     productNameView.setText(product.getName());
                     final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                     final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
+                    numberPicker.setOnFocusChangeListener(onFocusChangeListener);
+                    numberPicker.setOnKeyListener(onEditTextClickListener);
                     final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
                     ArrayAdapter<?> adapterSpinner = ArrayAdapter.createFromResource(getApplicationContext(),
                             R.array.quantity_choise, android.R.layout.simple_spinner_item);
@@ -243,6 +248,33 @@ public class CameraScanActivity extends AppCompatActivity {
             public void onFailure(Call<Product> call, Throwable t) {}
         });
     }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    EditText.OnKeyListener onEditTextClickListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                hideKeyboard(v);
+                return true;
+            }
+            return false;
+        }
+    };
+
+    EditText.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus) {
+                hideKeyboard(v);
+                return;
+            }
+        }
+    };
+
 
     //Check camera permissions
     private void requestCameraPermission() {
@@ -345,6 +377,9 @@ public class CameraScanActivity extends AppCompatActivity {
     };
 
     public void createProduct(DatePicker date, EditText quantity, EditText name, String spin) {
+        if (name.getText().toString().isEmpty() || quantity.getText().toString().isEmpty()) {
+            return;
+        }
         Product product = new Product();
         product.setDateEnd(new Date(date.getYear(), date.getMonth(), date.getDayOfMonth()));
         product.setQuantity(Double.parseDouble(quantity.getText().toString()));

@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -113,6 +114,10 @@ public class ShoppingListActivity extends BaseActivity {
                 productNameView.setText(productList.get(position));
                 final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                 final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
+                numberPicker.setOnFocusChangeListener(onFocusChangeListener);
+                numberPicker.setOnKeyListener(onEditTextClickListener);
+                numberPicker.setSelection(numberPicker.getText().length());
+
                 final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
                 ArrayAdapter<?> adapterSpinner = ArrayAdapter.createFromResource(getApplicationContext(),
                         R.array.quantity_choise, android.R.layout.simple_spinner_item);
@@ -134,28 +139,32 @@ public class ShoppingListActivity extends BaseActivity {
                 mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog1, int which) {
-                        Product product = new Product();
-                        product.setDateEnd(new Date(date.getYear(), date.getMonth(), date.getDayOfMonth()));
-                        product.setQuantity(Double.parseDouble(numberPicker.getText().toString()));
-                        product.setName(productNameView.getText().toString());
-                        product.setQuantityChoise(spinner.getSelectedItem().toString());
-                                ////
-                        product.setDescription("smth description");
-                        product.setImgId(R.drawable.carrot);
+                        if (!productNameView.getText().toString().isEmpty() && !numberPicker.getText().toString().isEmpty()) {
+                            Product product = new Product();
+                            product.setDateEnd(new Date(date.getYear(), date.getMonth(), date.getDayOfMonth()));
+                            product.setQuantity(Double.parseDouble(numberPicker.getText().toString()));
+                            product.setName(productNameView.getText().toString());
+                            product.setQuantityChoise(spinner.getSelectedItem().toString());
+                            ////
+                            product.setDescription("smth description");
+                            product.setImgId(R.drawable.carrot);
 
-                        products.add(product);
-                        saveProductsButton.setVisibility(View.VISIBLE);
+                            products.add(product);
+                            saveProductsButton.setVisibility(View.VISIBLE);
 
-                        productList.remove(position);
-                        adapter.notifyDataSetChanged();
+                            productList.remove(position);
+                            adapter.notifyDataSetChanged();
 
-                        Gson gson = new Gson();
-                        SharedPreferences.Editor editor = sPref.edit();
-                        String json = gson.toJson(productList);
-                        editor.putString(shoppingListSharedKey, json);
-                        editor.apply();
+                            Gson gson = new Gson();
+                            SharedPreferences.Editor editor = sPref.edit();
+                            String json = gson.toJson(productList);
+                            editor.putString(shoppingListSharedKey, json);
+                            editor.apply();
 
-                        dialog1.dismiss();
+                            dialog1.dismiss();
+                        } else {
+                            //TODO: не закрывать диалог, а предлагать ввести название еще раз
+                        }
                     }
                 });
 
@@ -197,12 +206,18 @@ public class ShoppingListActivity extends BaseActivity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 String textProduct = shoppingListText.getText().toString();
+                if (textProduct.isEmpty()) {
+                    hideKeyboard(v);
+                    return true;
+                }
                 productList.add(textProduct);
                 adapter.notifyDataSetChanged();
                 shoppingListText.getText().clear();
                 shoppingListText.clearFocus();
 
                 addItemToSharedPref(textProduct);
+
+                hideKeyboard(v);
 
                 return true;
             }
