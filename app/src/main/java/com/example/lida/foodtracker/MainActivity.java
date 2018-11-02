@@ -3,9 +3,14 @@ package com.example.lida.foodtracker;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -13,6 +18,8 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +41,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -50,6 +58,12 @@ public class MainActivity extends BaseActivity {
     private Toolbar toolbar;
     private SharedPreferences sPref;
     private String productsSharedKey = "Products";
+
+    NotificationManagerCompat notificationManager;
+    NotificationCompat.Builder builder;
+
+    // Идентификатор уведомления
+    private static final int NOTIFY_ID = 101;
 
     @Override
     int getContentViewId() {
@@ -72,6 +86,24 @@ public class MainActivity extends BaseActivity {
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
+        notificationManager = NotificationManagerCompat.from(this);
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this,
+                0, notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        Resources res = this.getResources();
+
+        builder = new NotificationCompat.Builder(this);
+        builder.setContentIntent(contentIntent)
+                .setSmallIcon(R.drawable.carrot)
+                .setContentTitle("Напоминание")
+                .setContentText("У вас скоро испортятся продукты!!!")
+                .setTicker("Подчисти холодос :)")
+                .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.carrot))
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true);
+
         loadProducts();
         productAdapter = new ProductAdapter(this, R.layout.product_list_item, products);
 
@@ -83,6 +115,7 @@ public class MainActivity extends BaseActivity {
 
         productAdapter.sort(new ProductComparator());
         productAdapter.notifyDataSetChanged();
+        notifyIfNeed();
 
         productList.setEmptyView(findViewById(R.id.empty_group));
         productList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -95,6 +128,7 @@ public class MainActivity extends BaseActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 products.remove(position);
                                 productAdapter.notifyDataSetChanged();
+                                notifyIfNeed();
 
                                 Gson gson = new Gson();
                                 SharedPreferences.Editor editor = sPref.edit();
@@ -133,8 +167,8 @@ public class MainActivity extends BaseActivity {
                 startActivityForResult(intent, 1);
             }
         });
-    }
 
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -155,6 +189,25 @@ public class MainActivity extends BaseActivity {
 
         productAdapter.sort(new ProductComparator());
         productAdapter.notifyDataSetChanged();
+        notifyIfNeed();
+    }
+
+    private void notifyIfNeed() {
+        notificationManager.cancelAll();
+
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+
+        for (Product product : products) {
+            startDate.set(product.getDateEnd().getYear(), product.getDateEnd().getMonth(), product.getDateEnd().getDate());
+            long start = startDate.getTimeInMillis();
+            long end = endDate.getTimeInMillis();
+            Long days = (long) (start - end) / (1000 * 60 * 60 * 24);
+            if (days <= 5) {
+                notificationManager.notify(NOTIFY_ID, builder.build());
+                break;
+            }
+        }
     }
 
     private void loadProducts() {
@@ -176,6 +229,7 @@ public class MainActivity extends BaseActivity {
             List<Product> prods = gson.fromJson(json, type);
             for (Product p: prods) {
                 products.add(p);
+
             }
         }
     }

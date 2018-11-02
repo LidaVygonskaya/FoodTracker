@@ -80,6 +80,7 @@
         android:gravity="end"
         android:hint="@string/enter_product_count"
         android:inputType="numberDecimal"
+        android:text="1"
         android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="@+id/spinner_quantity_choise"
         app:layout_constraintEnd_toStartOf="@+id/spinner_quantity_choise"
