@@ -23,6 +23,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -31,6 +32,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -124,13 +126,14 @@ public class CameraScanActivity extends AppCompatActivity {
                 final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
                 final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                 final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
+                final Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
                 mBuilder.setView(v);
 
                 mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        createProduct(date, numberPicker, productNameView);
+                        createProduct(date, numberPicker, productNameView, /*spinner.getSelectedItem().toString()*/"шт");
                         dialog.dismiss();
                         isAbleToScan = true;
                         checkButtonVisibility();
@@ -181,13 +184,18 @@ public class CameraScanActivity extends AppCompatActivity {
                     productNameView.setText(product.getName());
                     final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                     final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
+                    final Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                    /*ArrayAdapter<?> adapter =
+                            ArrayAdapter.createFromResource(getApplicationContext(), R.array.quantity_choise, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(adapter);*/
 
                     mBuilder.setView(v);
 
                     mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            createProduct(date, numberPicker, productNameView);
+                            createProduct(date, numberPicker, productNameView, /*spinner.getSelectedItem().toString()*/"шт");
                             dialog.dismiss();
                             isAbleToScan = true;
                             checkButtonVisibility();
@@ -312,15 +320,14 @@ public class CameraScanActivity extends AppCompatActivity {
         }
     };
 
-    public void createProduct(DatePicker date, EditText quantity, EditText name) {
+    public void createProduct(DatePicker date, EditText quantity, EditText name, String spin) {
         Product product = new Product();
         product.setDateEnd(new Date(date.getYear(), date.getMonth(), date.getDayOfMonth()));
-        product.setQuantity(Integer.parseInt(quantity.getText().toString()));
+        product.setQuantity(Double.parseDouble(quantity.getText().toString()));
         product.setName(name.getText().toString());
-        ////
         product.setDescription("smth description");
         product.setImgId(R.drawable.carrot);
-        ///
+        product.setQuantityChoise(spin);
         products.add(product);
         arrayAdapter.sort(new ProductComparator());
         arrayAdapter.notifyDataSetChanged();

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="quantity_choise">
+        <item>шт</item>
+        <item>кг</item>
+        <item>г</item>
+        <item>л</item>
+        <item>мл</item>
+    </string-array>
+</resources>

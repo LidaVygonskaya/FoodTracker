@@ -94,6 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.704"
         app:layout_constraintStart_toEndOf="@+id/numberPicker"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:entries="@array/quantity_choise"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -20,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 
 import com.example.lida.foodtracker.Retrofit.Product;
 import com.example.lida.foodtracker.Utils.ProductAdapter;
@@ -147,6 +148,7 @@ public class ShoppingListActivity extends BaseActivity {
                         productNameView.setText(productList.get(position));
                         final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                         final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
+                        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
                         mBuilder.setView(v);
 
@@ -155,8 +157,9 @@ public class ShoppingListActivity extends BaseActivity {
                             public void onClick(DialogInterface dialog1, int which) {
                                 Product product = new Product();
                                 product.setDateEnd(new Date(date.getYear(), date.getMonth(), date.getDayOfMonth()));
-                                product.setQuantity(Integer.parseInt(numberPicker.getText().toString()));
+                                product.setQuantity(Double.parseDouble(numberPicker.getText().toString()));
                                 product.setName(productNameView.getText().toString());
+                                product.setQuantityChoise(/*spinner.getSelectedItem().toString()*/"шт");
                                 ////
                                 product.setDescription("smth description");
                                 product.setImgId(R.drawable.carrot);
