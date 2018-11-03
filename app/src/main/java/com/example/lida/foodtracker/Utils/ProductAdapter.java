@@ -70,6 +70,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
         Product product = products.get(position);
         txtTitle.setText(product.getName());
+        Integer i = product.getImgId();
         imageView.setImageResource(product.getImgId());
 
         Calendar startDate = Calendar.getInstance();

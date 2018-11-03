@@ -2,6 +2,7 @@ package com.example.lida.foodtracker;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -79,6 +80,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        addNotification();
         setContentView(R.layout.activity_main);
 
         sPref = getPreferences(MODE_PRIVATE);
@@ -100,7 +102,7 @@ public class MainActivity extends BaseActivity {
                 .setContentTitle("Напоминание")
                 .setContentText("У вас скоро испортятся продукты!!!")
                 .setTicker("Подчисти холодос :)")
-                .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.carrot))
+                .setLargeIcon(BitmapFactory.decodeResource(res, R.mipmap.carrot))
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true);
 
@@ -215,10 +217,13 @@ public class MainActivity extends BaseActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
+            Log.d(TAG, "BUNDLE IS NOT NULL");
             List<Product> resultList = (ArrayList<Product>) bundle.getSerializable("PRODUCT_LIST");
 
-            for (Product p : resultList) {
-                addProductToSharedPref(p);
+            if (resultList != null) {
+                for (Product p : resultList) {
+                    addProductToSharedPref(p);
+                }
             }
         }
 
@@ -250,5 +255,18 @@ public class MainActivity extends BaseActivity {
         editor.putString(productsSharedKey, json);
         editor.apply();
     }
+
+    private void addNotification() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 13);
+        calendar.set(Calendar.MINUTE, 11);
+        calendar.set(Calendar.SECOND, 13);
+
+        Intent intent = new Intent(getApplicationContext(), NotificationReciever.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
 
 }
