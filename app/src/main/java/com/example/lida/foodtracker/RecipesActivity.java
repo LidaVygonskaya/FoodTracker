@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.lida.foodtracker.Retrofit.Product;
@@ -36,6 +37,8 @@ public class RecipesActivity extends BaseActivity {
     private ArrayList<Recipe> recipesList;
     private ListView recipes;
 
+    private ImageButton settingsButton;
+
     private LayoutInflater inflater;
     private FloatingActionButton addRecipesButton;
 
@@ -48,6 +51,9 @@ public class RecipesActivity extends BaseActivity {
         setContentView(R.layout.activity_recipes);
 
         sPref = getPreferences(MODE_PRIVATE);
+
+        settingsButton = (ImageButton) findViewById(R.id.settings);
+        settingsButton.setOnClickListener(settingsOnClick);
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
@@ -111,5 +117,13 @@ public class RecipesActivity extends BaseActivity {
         editor.putString(recipesSharedKey, json);
         editor.apply();
     }
+
+    View.OnClickListener settingsOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
+        }
+    };
 
 }

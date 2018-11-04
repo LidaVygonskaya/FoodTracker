@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Уведомления">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="switch_preference_1"
+            android:title="Допуск уведомлений"/>
+
+        <com.example.lida.foodtracker.TimePreference
+            android:key="key4"
+            android:title="Time Preference"
+            android:summary="Time Summary"
+            android:defaultValue="90" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
+

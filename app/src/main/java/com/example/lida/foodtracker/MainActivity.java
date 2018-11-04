@@ -53,6 +53,8 @@ public class MainActivity extends BaseActivity {
     private FloatingActionButton addProductButton;
     private ListView productList;
 
+    private ImageButton settingsButton;
+
     private ProductAdapter productAdapter;
     private List<Product> products;
 
@@ -84,6 +86,9 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         sPref = getPreferences(MODE_PRIVATE);
+
+        settingsButton = (ImageButton) findViewById(R.id.settings);
+        settingsButton.setOnClickListener(settingsOnClick);
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
@@ -269,4 +274,11 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    View.OnClickListener settingsOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
+        }
+    };
 }

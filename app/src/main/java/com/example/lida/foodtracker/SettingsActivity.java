@@ -1,15 +1,34 @@
 package com.example.lida.foodtracker;
 
 
-public class SettingsActivity extends BaseActivity {
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
-    @Override
-    int getContentViewId() {
-        return R.layout.activity_settings;
-    }
 
+
+public class SettingsActivity extends AppCompatActivity {
+
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    int getNavigationMenuItemId() {
-        return R.id.settings;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+
+        if (savedInstanceState == null) {
+            Fragment preferenceFragment = new PreferenceFragmentCustom();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.fragment, preferenceFragment);
+            //ft.add(R.id.pref_container, preferenceFragment);
+            ft.commit();
+        }
+
     }
+    
 }

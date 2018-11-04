@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -51,6 +52,8 @@ public class ShoppingListActivity extends BaseActivity {
         return R.id.shopping_list;
     }
 
+    private ImageButton settingsButton;
+
     private ArrayAdapter<String> adapter;
     private ArrayList<String> productList;
     private ListView shoppingList;
@@ -71,6 +74,9 @@ public class ShoppingListActivity extends BaseActivity {
         products = new ArrayList<>();
 
         sPref = getPreferences(MODE_PRIVATE);
+
+        settingsButton = (ImageButton) findViewById(R.id.settings);
+        settingsButton.setOnClickListener(settingsOnClick);
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
@@ -265,6 +271,14 @@ public class ShoppingListActivity extends BaseActivity {
         editor.putString(shoppingListSharedKey, json);
         editor.apply();
     }
+
+    View.OnClickListener settingsOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
+        }
+    };
 
 }
 
