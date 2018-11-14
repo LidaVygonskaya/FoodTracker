@@ -74,7 +74,11 @@ public class Product implements Serializable{
     }
 
     public String getComposition() {
-        return composition;
+        if (this.composition != null) {
+            return composition;
+        } else {
+            return "Упс! Не можем найти состав";
+        }
     }
 
     public void setComposition(String composition) {

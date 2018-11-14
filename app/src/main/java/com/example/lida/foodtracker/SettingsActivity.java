@@ -24,8 +24,8 @@ public class SettingsActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Fragment preferenceFragment = new PreferenceFragmentCustom();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(R.id.fragment, preferenceFragment);
-            //ft.add(R.id.pref_container, preferenceFragment);
+            //ft.add(R.id.fragment, preferenceFragment);
+            ft.add(R.id.pref_container, preferenceFragment);
             ft.commit();
         }
 

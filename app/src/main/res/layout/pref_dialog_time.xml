@@ -4,6 +4,9 @@
     android:id="@+id/edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="18dp"
+    android:paddingTop="18dp"
+    android:theme="@style/AlertDialog.AppCompat"
    />
     <!--android:paddingTop="@dimen/alert_def_padding"
     android:paddingBottom="@dimen/alert_def_padding"

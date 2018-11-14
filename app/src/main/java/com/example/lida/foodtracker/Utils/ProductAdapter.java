@@ -71,7 +71,8 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         Product product = products.get(position);
         txtTitle.setText(product.getName());
         Integer i = product.getImgId();
-        imageView.setImageResource(product.getImgId());
+        imageView.setImageResource(R.drawable.carrot);
+        //imageView.setImageResource(product.getImgId());
 
         Calendar startDate = Calendar.getInstance();
         startDate.set(product.getDateEnd().getYear(), product.getDateEnd().getMonth(), product.getDateEnd().getDate());

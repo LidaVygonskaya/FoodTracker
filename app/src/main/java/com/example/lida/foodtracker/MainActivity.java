@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
@@ -100,16 +101,6 @@ public class MainActivity extends BaseActivity {
                 0, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         Resources res = this.getResources();
-
-        builder = new NotificationCompat.Builder(this);
-        builder.setContentIntent(contentIntent)
-                .setSmallIcon(R.drawable.carrot)
-                .setContentTitle("Напоминание")
-                .setContentText("У вас скоро испортятся продукты!!!")
-                .setTicker("Подчисти холодос :)")
-                .setLargeIcon(BitmapFactory.decodeResource(res, R.mipmap.carrot))
-                .setWhen(System.currentTimeMillis())
-                .setAutoCancel(true);
 
         loadProducts();
         productAdapter = new ProductAdapter(this, R.layout.product_list_item, products);
@@ -211,7 +202,6 @@ public class MainActivity extends BaseActivity {
             long end = endDate.getTimeInMillis();
             Long days = (long) (start - end) / (1000 * 60 * 60 * 24);
             if (days <= 5) {
-                notificationManager.notify(NOTIFY_ID, builder.build());
                 break;
             }
         }
@@ -261,11 +251,27 @@ public class MainActivity extends BaseActivity {
         editor.apply();
     }
 
+    private Integer getHours(Integer timeFromPrefs) {
+        return timeFromPrefs / 60;
+    }
+
+    private Integer getMinutes(Integer timeFromPrefs) {
+        return timeFromPrefs % 60;
+    }
+
     private void addNotification() {
+        // Shared preferences for time preferences
+        SharedPreferences timePrefs = getSharedPreferences("com.example.lida.foodtracker_preferences", MODE_PRIVATE);
+        Integer timeFromPrefs = timePrefs.getInt("key4", 90);
+
+        Integer hours = getHours(timeFromPrefs);
+        Integer minutes = getMinutes(timeFromPrefs);
+
+
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 13);
-        calendar.set(Calendar.MINUTE, 11);
-        calendar.set(Calendar.SECOND, 13);
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.SECOND, 0);
 
         Intent intent = new Intent(getApplicationContext(), NotificationReciever.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);

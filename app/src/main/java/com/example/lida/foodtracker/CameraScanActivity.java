@@ -150,7 +150,7 @@ public class CameraScanActivity extends AppCompatActivity {
                 mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        createProduct(date, numberPicker, productNameView, spinner.getSelectedItem().toString());
+                        createProduct(date, numberPicker, productNameView, spinner.getSelectedItem().toString(), "noBarcode", null);
                         dialog.dismiss();
                         isAbleToScan = true;
                         checkButtonVisibility();
@@ -224,7 +224,7 @@ public class CameraScanActivity extends AppCompatActivity {
                     mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            createProduct(date, numberPicker, productNameView, spinner.getSelectedItem().toString());
+                            createProduct(date, numberPicker, productNameView, spinner.getSelectedItem().toString(), barcode, product.getComposition());
                             dialog.dismiss();
                             isAbleToScan = true;
                             checkButtonVisibility();
@@ -376,7 +376,7 @@ public class CameraScanActivity extends AppCompatActivity {
         }
     };
 
-    public void createProduct(DatePicker date, EditText quantity, EditText name, String spin) {
+    public void createProduct(DatePicker date, EditText quantity, EditText name, String spin, String barCode, String composition) {
         if (name.getText().toString().isEmpty() || quantity.getText().toString().isEmpty()) {
             return;
         }
@@ -387,6 +387,9 @@ public class CameraScanActivity extends AppCompatActivity {
         product.setDescription("smth description");
         product.setImgId(R.drawable.carrot);
         product.setQuantityChoise(spin);
+        product.setBarCode(barCode);
+        //TODO: set composition!! Сейчас она не выставляется. Надо найти проблемное место скорее всего это здесь
+        product.setComposition(composition);
         products.add(product);
         arrayAdapter.sort(new ProductComparator());
         arrayAdapter.notifyDataSetChanged();

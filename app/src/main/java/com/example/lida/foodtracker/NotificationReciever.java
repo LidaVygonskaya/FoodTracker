@@ -31,8 +31,8 @@ public class NotificationReciever extends BroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setLargeIcon(BitmapFactory.decodeResource(res, R.mipmap.carrot))
                 .setSmallIcon(R.mipmap.carrot)
-                .setContentTitle("Напоминание Новое")
-                .setContentText("У вас скоро испортятся продукты")
+                .setContentTitle("Загляните в холодильник! :)")
+                .setContentText("Кажется нужно съесть пару продуктов")
                 .setTicker("Подчисти холодос")
                 .setAutoCancel(true);
         notificationManager.notify(100, builder.build());
