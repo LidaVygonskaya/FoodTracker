@@ -2,6 +2,8 @@ package com.example.lida.foodtracker.Utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.provider.CalendarContract;
@@ -9,6 +11,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lida.foodtracker.R;
+import com.example.lida.foodtracker.Retrofit.App;
 import com.example.lida.foodtracker.Retrofit.Product;
 
 import java.time.temporal.ChronoUnit;
@@ -28,6 +32,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.Inflater;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductAdapter extends ArrayAdapter<Product> {
     private final Context context;
@@ -70,8 +79,30 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
         Product product = products.get(position);
         txtTitle.setText(product.getName());
-        Integer i = product.getImgId();
-        imageView.setImageResource(R.drawable.carrot);
+
+
+
+        String productBarcode = product.getBarCode() + ".jpg";
+        Call<ResponseBody> call = App.getApi().getImage(productBarcode);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                        imageView.setImageBitmap(bitmap);
+                        return;
+                    }
+                }
+                imageView.setImageResource(R.drawable.carrot);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                imageView.setImageResource(R.drawable.carrot);
+            }
+        });
         //imageView.setImageResource(product.getImgId());
 
         Calendar startDate = Calendar.getInstance();
@@ -81,27 +112,31 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         long end = endDate.getTimeInMillis();
 
         Long days = (long) (start - end) / (1000 * 60 * 60 * 24);
-        String dayToEnd, title;
+        String dayToEnd, count;
         if (days < 0) {
-            dayToEnd = getColoredSpanned(days.toString(), "#800000");
-            title = getColoredSpanned(product.getName(), "#800000");
+            dayToEnd = "<br/>Дней до конца срока годности: " + getColoredSpanned(days.toString(), "#800000");
         } else if (days > 5) {
-            dayToEnd = getColoredSpanned(days.toString(), "#008000");
-            title = getColoredSpanned(product.getName(), "#008000");
+            dayToEnd = "<br/>Дней до конца срока годности: " + getColoredSpanned(days.toString(), "#008000");
         } else {
-            dayToEnd = getColoredSpanned(days.toString(), "#f28d18");
-            title = getColoredSpanned(product.getName(), "#f28d18");
+            dayToEnd = "<br/>Дней до конца срока годности: " + getColoredSpanned(days.toString(), "#f28d18");
         }
-        txtTitle.setText(Html.fromHtml(title));
+        if (product.getQuantityChoise().equals("шт") || product.getQuantityChoise().equals("г") || product.getQuantityChoise().equals("мл")) {
+            count = "Кол-во: " + product.getQuantity().intValue() + " " + product.getQuantityChoise();
+        } else {
+            count = "Кол-во: " + product.getQuantity() + " " + product.getQuantityChoise();
+        }
 
-        extraTxt.setText(Html.fromHtml("Кол-во: " + product.getQuantity() + " " + product.getQuantityChoise() + "<br/>Годен до: " +
-                product.getDateEnd().getDate() + "." + product.getDateEnd().getMonth() + "." + product.getDateEnd().getYear() +
-                "<br/>Осталось дней: " + dayToEnd));
+        txtTitle.setText(product.getName());
+
+        extraTxt.setText(Html.fromHtml(count + dayToEnd));
         return view;
     }
 
     private String getColoredSpanned(String text, String color) {
-        return "<font color=" + color + "><b>" + text + "<b></font>";
+        return "<font color=" + color + "><b>" + text + "</b></font>";
     }
 
+    private String getColored(String text, String color) {
+        return "<font color=" + color + ">" + text + "</font>";
+    }
 }

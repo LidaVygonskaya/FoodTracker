@@ -198,14 +198,27 @@ public class CameraScanActivity extends AppCompatActivity {
                     mBuilder.setTitle("Добавление продукта");
 
                     final EditText productNameView = (EditText) v.findViewById(R.id.add_product);
-                    productNameView.setText(product.getName());
+                    String name[] = product.getName().toLowerCase().split(" ");
+                    productNameView.setText(name[0].substring(0, 1).toUpperCase() + name[0].substring(1));
+
                     final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                     final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
+                    numberPicker.setText(name[name.length - 2].replace(',', '.'));
+
                     numberPicker.setOnFocusChangeListener(onFocusChangeListener);
                     numberPicker.setOnKeyListener(onEditTextClickListener);
+
                     final Spinner spinner = (Spinner) v.findViewById(R.id.spinner_quantity_choise);
-                    ArrayAdapter<?> adapterSpinner = ArrayAdapter.createFromResource(getApplicationContext(),
-                            R.array.quantity_choise, android.R.layout.simple_spinner_item);
+                    String[] listCount = getResources().getStringArray(R.array.quantity_choise);
+                    Integer idCount = 0;
+                    for (int i = 0; i < listCount.length; i++)
+                    {
+                        if (listCount[i].equals(name[name.length - 1])) {
+                            idCount = i;
+                            break;
+                        }
+                    }
+                    ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, listCount);
                     adapterSpinner.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
                     spinner.setAdapter(adapterSpinner);
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -218,6 +231,10 @@ public class CameraScanActivity extends AppCompatActivity {
                         public void onNothingSelected(AdapterView<?> parent) {
                         }
                     });
+                    spinner.setSelection(idCount);
+
+
+
 
                     mBuilder.setView(v);
 
