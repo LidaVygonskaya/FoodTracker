@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.Image;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -89,6 +91,8 @@ public class ShoppingListActivity extends BaseActivity {
 
         shoppingList = (ListView) findViewById(R.id.shopp_list);
         shoppingList.setEmptyView(findViewById(R.id.empty_group));
+        ImageView im = (ImageView) findViewById(R.id.empty);
+        im.setAlpha(50);
 
         loadShoppingList();
 

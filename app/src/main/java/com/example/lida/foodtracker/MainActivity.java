@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
 
@@ -116,6 +117,8 @@ public class MainActivity extends BaseActivity {
         notifyIfNeed();
 
         productList.setEmptyView(findViewById(R.id.empty_group));
+        ImageView im = (ImageView) findViewById(R.id.empty);
+        im.setAlpha(0.5f);
         productList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
