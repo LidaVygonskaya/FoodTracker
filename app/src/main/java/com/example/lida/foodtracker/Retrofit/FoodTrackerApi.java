@@ -17,4 +17,7 @@ public interface FoodTrackerApi {
     @GET("media/big_images/{imageName}")
     Call<ResponseBody> getImage(@Path("imageName") String imageName);
 
+    @GET("/api/v1/promocodes")
+    Call<Promocode> getPromocodes();
+
 }

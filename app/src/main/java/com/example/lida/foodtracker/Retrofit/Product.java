@@ -1,14 +1,10 @@
 package com.example.lida.foodtracker.Retrofit;
 
-import android.widget.DatePicker;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.time.Month;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class Product implements Serializable{
     @SerializedName("bar_code")

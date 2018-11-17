@@ -16,6 +16,8 @@
     <string name="shopping_list_empty">Здесь пусто! Начните добавлять продукты :)</string>
     <string name="recipes_list_empty">Здесь пусто! Начните добавлять рецепты :)</string>
     <string name="quantity">Количество</string>
+    <string name="promocodes">Акции</string>
+    <string name="promocodes_offers">Скидки и акции</string>
 
 
 </resources>

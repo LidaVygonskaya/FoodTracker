@@ -11,6 +11,13 @@
         android:icon="@drawable/ic_format_list_bulleted_black_24dp"/>
 
     <item
+        android:id="@+id/promocodes"
+        android:title="@string/promocodes"
+        android:icon="@drawable/ic_local_offer_black_24dp"/>
+
+
+
+    <item
         android:id="@+id/recipes"
         android:title="@string/recipes"
         android:icon="@drawable/ic_room_service_black_24dp"/>

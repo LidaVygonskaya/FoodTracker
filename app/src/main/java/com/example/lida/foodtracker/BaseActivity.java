@@ -46,8 +46,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 startActivity(new Intent(this, ShoppingListActivity.class));
             } else if (itemId == R.id.recipes) {
                 startActivity(new Intent(this, RecipesActivity.class));
-            } else if (itemId == R.id.settings) {
-                startActivity(new Intent(this, SettingsActivity.class));
+            } else if (itemId == R.id.promocodes) {
+                startActivity(new Intent(this, PromocodesActivity.class));
             }
             finish();
         }, 10);

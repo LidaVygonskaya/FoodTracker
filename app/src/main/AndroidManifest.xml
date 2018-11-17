@@ -4,11 +4,12 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SET_ALARM"/>
-    <permission android:name="android.permission.FLASHLIGHT"
+    <uses-permission android:name="android.permission.SET_ALARM" />
+
+    <permission
+        android:name="android.permission.FLASHLIGHT"
         android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
-        android:protectionLevel="normal"
-        />
+        android:protectionLevel="normal" />
 
     <application
         android:name=".Retrofit.App"
@@ -27,26 +28,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CameraScanActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".CameraScanActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
-        <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="${HOCKEYAPP_APP_ID}" />
+        <meta-data
+            android:name="net.hockeyapp.android.appIdentifier"
+            android:value="${HOCKEYAPP_APP_ID}" />
         <!-- To use multiple models: android:value="barcode,model2,model3" -->
         <activity android:name=".SpacesActivity" />
-        <activity android:name=".ShoppingListActivity"
+        <activity
+            android:name=".ShoppingListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".RecipesActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".SettingsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ProductActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".BaseActivity"></activity>
-        <receiver android:name=".NotificationReciever"/>
+        <activity
+            android:name=".RecipesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProductActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".BaseActivity" />
+
+        <receiver android:name=".NotificationReciever" />
+
+        <activity android:name=".PromocodesActivity"></activity>
     </application>
 
 </manifest>
