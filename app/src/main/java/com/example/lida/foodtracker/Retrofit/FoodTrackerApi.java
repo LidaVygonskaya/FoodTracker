@@ -1,5 +1,6 @@
 package com.example.lida.foodtracker.Retrofit;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -18,6 +19,6 @@ public interface FoodTrackerApi {
     Call<ResponseBody> getImage(@Path("imageName") String imageName);
 
     @GET("/api/v1/promocodes")
-    Call<Promocode> getPromocodes();
+    Call<Map<String, List<Promocode>>> getPromocodes();
 
 }

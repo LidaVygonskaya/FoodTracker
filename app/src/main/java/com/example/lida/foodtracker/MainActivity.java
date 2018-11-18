@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -50,12 +52,15 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import de.cketti.mailto.EmailIntentBuilder;
+
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private FloatingActionButton addProductButton;
     private ListView productList;
 
     private ImageButton settingsButton;
+    private ImageButton accountButton;
 
     private ProductAdapter productAdapter;
     private List<Product> products;
@@ -114,11 +119,11 @@ public class MainActivity extends BaseActivity {
 
         productAdapter.sort(new ProductComparator());
         productAdapter.notifyDataSetChanged();
-        notifyIfNeed();
+        //notifyIfNeed();
 
         productList.setEmptyView(findViewById(R.id.empty_group));
         ImageView im = (ImageView) findViewById(R.id.empty);
-        im.setAlpha(0.5f);
+        //im.setAlpha(0.5f);
         productList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -129,7 +134,7 @@ public class MainActivity extends BaseActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 products.remove(position);
                                 productAdapter.notifyDataSetChanged();
-                                notifyIfNeed();
+                                //notifyIfNeed();
 
                                 Gson gson = new Gson();
                                 SharedPreferences.Editor editor = sPref.edit();
@@ -169,6 +174,11 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        List<Product> oldProducts = getOldProducts();
+        if (!oldProducts.isEmpty()) {
+            createEmailDialog();
+        }
+
     }
 
     @Override
@@ -190,7 +200,7 @@ public class MainActivity extends BaseActivity {
 
         productAdapter.sort(new ProductComparator());
         productAdapter.notifyDataSetChanged();
-        notifyIfNeed();
+        //notifyIfNeed();
     }
 
     private void notifyIfNeed() {
@@ -290,4 +300,56 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
         }
     };
+
+
+    private void sendEmail() {
+        EmailIntentBuilder.from(this)
+                .to("food@example.com")
+                .cc("user@example.com")
+                .subject("Заказ продуктов")
+                .body("Какие-то продукты")
+                .start();
+    }
+
+    private List<Product> getOldProducts() {
+        List<Product> oldProducts = new ArrayList<Product>();
+
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+
+        for (Product product: products) {
+            startDate.set(product.getDateEnd().getYear(), product.getDateEnd().getMonth(), product.getDateEnd().getDate());
+            long start = startDate.getTimeInMillis();
+            long end = endDate.getTimeInMillis();
+            Long days = (long) (start - end) / (1000 * 60 * 60 * 24);
+            if (days <= 3) {
+                oldProducts.add(product);
+            }
+        }
+
+        return oldProducts;
+    }
+
+    private void createEmailDialog() {
+        DialogInterface.OnClickListener myClickListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case Dialog.BUTTON_POSITIVE:
+                        sendEmail();
+                        finish();
+                        break;
+                    case Dialog.BUTTON_NEUTRAL:
+                        finish();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Заказ продуктов")
+                .setMessage("Кажется некоторые из продуктов скоро испортятся. Заказать?")
+                .setPositiveButton("Купить", myClickListener)
+                .setNegativeButton("Отмена", myClickListener);
+        builder.create().show();
+    }
 }

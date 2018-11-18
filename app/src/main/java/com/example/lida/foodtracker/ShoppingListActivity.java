@@ -92,7 +92,7 @@ public class ShoppingListActivity extends BaseActivity {
         shoppingList = (ListView) findViewById(R.id.shopp_list);
         shoppingList.setEmptyView(findViewById(R.id.empty_group));
         ImageView im = (ImageView) findViewById(R.id.empty);
-        im.setAlpha(50);
+        //im.setAlpha(50);
 
         loadShoppingList();
 

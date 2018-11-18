@@ -48,4 +48,8 @@ public class Promocode implements Serializable {
 
     private String url;
 
+    @Override
+    public String toString() {
+        return this.title;
+    }
 }
