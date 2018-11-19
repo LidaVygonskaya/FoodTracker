@@ -59,7 +59,7 @@ public class ShoppingListActivity extends BaseActivity {
     int getNavigationMenuItemId() {
         return R.id.shopping_list;
     }
-    
+
     //private ImageButton settingsButton;
     private ImageButton accountButton;
     private Button loadButton;
