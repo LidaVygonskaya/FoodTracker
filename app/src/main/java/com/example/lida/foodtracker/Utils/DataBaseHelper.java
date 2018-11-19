@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import com.example.lida.foodtracker.Retrofit.Category;
+import com.example.lida.foodtracker.Retrofit.Recepie;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.io.File;
@@ -29,46 +30,15 @@ public class DataBaseHelper extends SQLiteAssetHelper {
     private final String LOG_TAG = "dbLog";
     private SQLiteDatabase myDataBase;
     private static final String CATEGORIES_TABLE = "kuking_category";
+    private static final String RECEPIES_TABLE = "kuking_recepts";
     private static final String[] CATEGORIES_COLUMNS = {"id_category", "category_name"};
     private static final String[] RECEPIES_COLUMNS = {"id_recepts",
-            "recept_category", "podcategory", "recept_sostav", "recept_instuction"};
+            "recept_category", "podcategory", "recept_name", "recept_sostav", "recept_instuction"};
     public DataBaseHelper(Context context) {
 
         super(context, DB_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, 1);
         Log.d(LOG_TAG, "hello from database helper");
     }
-
-/*
-    public Cursor getInformation(String productName) {
-        SQLiteDatabase db = getReadableDatabase();
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String sqlTables = "Calories";
-        qb.setTables(sqlTables);
-        String selection = "_id" + "=" + "'" + productName + "'";
-        Cursor c = qb.query(db,COLUMNS, selection, null,null,null,null);
-        c.moveToFirst();
-        return c;
-    }
-    */
-
-    public String[] getProductNames() {
-        SQLiteDatabase db = getReadableDatabase();
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String sqlTables = "Calories";
-        String[] columns = new String[] {"_id"};
-        qb.setTables(sqlTables);
-        Cursor c = qb.query(db, columns, null, null, null, null, null);
-        c.moveToFirst();
-        ArrayList<String> productNames = new ArrayList<String>();
-        while (!c.isAfterLast()) {
-            productNames.add(c.getString(c.getColumnIndex("_id")));
-            c.moveToNext();
-        }
-        c.close();
-        return productNames.toArray(new String[productNames.size()]);
-    }
-
-
 
     public List<Category> getCategories() {
         List<Category> categories = new ArrayList<Category>();
@@ -86,5 +56,29 @@ public class DataBaseHelper extends SQLiteAssetHelper {
         }
         c.close();
         return categories;
+    }
+
+    public List<Recepie> getRecepiesInCategory(Integer categoryId) {
+        List<Recepie> recepies = new ArrayList<Recepie>();
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        qb.setTables(RECEPIES_TABLE);
+        String selection = "recept_category = ?";
+        String [] selectionArgs = new String[] { categoryId.toString() };
+        Cursor c = qb.query(db, RECEPIES_COLUMNS, selection, selectionArgs, null, null, null);
+        c.moveToFirst();
+        while (!c.isAfterLast()) {
+
+            Integer id = c.getInt(c.getColumnIndex(RECEPIES_COLUMNS[0]));
+            Integer category = c.getInt(c.getColumnIndex(RECEPIES_COLUMNS[1]));
+            String podcategory = c.getString(c.getColumnIndex(RECEPIES_COLUMNS[2]));
+            String name = c.getString(c.getColumnIndex(RECEPIES_COLUMNS[3]));
+            String sostav = c.getString(c.getColumnIndex(RECEPIES_COLUMNS[4]));
+            String instruction = c.getString(c.getColumnIndex(RECEPIES_COLUMNS[5]));
+            recepies.add(new Recepie(id, category, podcategory, name, sostav, instruction));
+            c.moveToNext();
+        }
+        c.close();
+        return recepies;
     }
 }

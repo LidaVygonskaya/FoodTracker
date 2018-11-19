@@ -61,7 +61,8 @@
             android:name=".PromocodesActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".CategoryRecepiesActivity"></activity>
+        <activity android:name=".CategoryRecepiesActivity" />
+        <activity android:name=".RecepieActivity"></activity>
     </application>
 
 </manifest>
