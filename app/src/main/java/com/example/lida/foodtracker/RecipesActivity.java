@@ -37,6 +37,7 @@ public class RecipesActivity extends BaseActivity {
     private ArrayList<Recipe> recipesList;
     private ListView recipes;
 
+    private ImageButton accountButton;
     private ImageButton settingsButton;
 
     private LayoutInflater inflater;
@@ -51,6 +52,9 @@ public class RecipesActivity extends BaseActivity {
         setContentView(R.layout.activity_recipes);
 
         sPref = getPreferences(MODE_PRIVATE);
+
+        accountButton = findViewById(R.id.account);
+        accountButton.setOnClickListener(accountClickListener);
 
         settingsButton = (ImageButton) findViewById(R.id.settings);
         settingsButton.setOnClickListener(settingsOnClick);
@@ -123,6 +127,15 @@ public class RecipesActivity extends BaseActivity {
         public void onClick(View v) {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
+        }
+    };
+
+
+    View.OnClickListener accountClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent accountIntent = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(accountIntent);
         }
     };
 

@@ -7,11 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-
+import android.view.View;
+import android.widget.ImageButton;
 
 
 public class SettingsActivity extends AppCompatActivity {
-
+    private ImageButton closeButton;
 
     /**
      * {@inheritDoc}
@@ -20,7 +21,13 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        closeButton = findViewById(R.id.exit);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         if (savedInstanceState == null) {
             Fragment preferenceFragment = new PreferenceFragmentCustom();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

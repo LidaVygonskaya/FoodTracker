@@ -8,17 +8,22 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.Image;
+import android.preference.PreferenceManager;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,6 +33,7 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.example.lida.foodtracker.Retrofit.Product;
 import com.example.lida.foodtracker.Utils.ProductAdapter;
@@ -53,8 +59,12 @@ public class ShoppingListActivity extends BaseActivity {
     int getNavigationMenuItemId() {
         return R.id.shopping_list;
     }
+    
+    //private ImageButton settingsButton;
+    private ImageButton accountButton;
+    private Button loadButton;
 
-    private ImageButton settingsButton;
+    private Button saveButton;
 
     private ArrayAdapter<String> adapter;
     private ArrayList<String> productList;
@@ -68,6 +78,7 @@ public class ShoppingListActivity extends BaseActivity {
 
     private SharedPreferences sPref;
     private String shoppingListSharedKey = "ShoppingList";
+    private String favouriteShoppingKey = "Favourite_list";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +88,11 @@ public class ShoppingListActivity extends BaseActivity {
 
         sPref = getPreferences(MODE_PRIVATE);
 
-        settingsButton = (ImageButton) findViewById(R.id.settings);
-        settingsButton.setOnClickListener(settingsOnClick);
+        accountButton = findViewById(R.id.account);
+        accountButton.setOnClickListener(accountClickListener);
+
+        loadButton = findViewById(R.id.empty_button);
+        loadButton.setOnClickListener(loadClickListener);
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
@@ -93,6 +107,10 @@ public class ShoppingListActivity extends BaseActivity {
         shoppingList.setEmptyView(findViewById(R.id.empty_group));
         ImageView im = (ImageView) findViewById(R.id.empty);
         //im.setAlpha(50);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         loadShoppingList();
 
@@ -284,5 +302,82 @@ public class ShoppingListActivity extends BaseActivity {
         }
     };
 
+
+    View.OnClickListener accountClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent accountIntent = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(accountIntent);
+        }
+    };
+
+    View.OnClickListener saveClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_shopping_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.save_list:
+                saveList();
+                break;
+            case R.id.settings:
+                openSettings();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void saveList() {
+        //TODO: Save list
+
+        sPref = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sPref.edit();
+
+        String email = sPref.getString("email", "");
+
+        if (!email.isEmpty() && !productList.isEmpty()) {
+            Gson gson = new Gson();
+            String json = gson.toJson(productList);
+            editor.putString(favouriteShoppingKey, json);
+            editor.apply();
+        } else {
+            Toast.makeText(getApplicationContext(), "Необходимо войти", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void openSettings() {
+        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void loadRemoteShoppingList() {
+        //TODO: load remote shopping list from server
+        sPref = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        String products = sPref.getString(favouriteShoppingKey, "");
+        if (products.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Кажется у вас еще нет списка", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Обязательно загружу", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    View.OnClickListener loadClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            loadRemoteShoppingList();
+        }
+    };
 }
 

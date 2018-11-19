@@ -57,10 +57,10 @@
 
         <receiver android:name=".NotificationReciever" />
 
-        <activity android:name=".PromocodesActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+        <activity
+            android:name=".PromocodesActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>

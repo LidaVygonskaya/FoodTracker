@@ -97,6 +97,9 @@ public class MainActivity extends BaseActivity {
         settingsButton = (ImageButton) findViewById(R.id.settings);
         settingsButton.setOnClickListener(settingsOnClick);
 
+        accountButton = (ImageButton) findViewById(R.id.account);
+        accountButton.setOnClickListener(accountClickListener);
+
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
@@ -352,4 +355,12 @@ public class MainActivity extends BaseActivity {
                 .setNegativeButton("Отмена", myClickListener);
         builder.create().show();
     }
+
+    View.OnClickListener accountClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent accountIntent = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(accountIntent);
+        }
+    };
 }

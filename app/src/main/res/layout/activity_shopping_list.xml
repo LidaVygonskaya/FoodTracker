@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteY="0dp" />
 
-
+<!--
     <ImageButton
         android:id="@+id/settings"
         android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
         android:background="@null"
         android:src="@drawable/ic_settings_white_24dp"
         app:layout_constraintEnd_toEndOf="@+id/toolbar2"
-        app:layout_constraintTop_toTopOf="@+id/toolbar2" />
+        app:layout_constraintTop_toTopOf="@+id/toolbar2" />-->
 
     <TextView
         android:id="@+id/title"
@@ -111,7 +111,7 @@
         app:layout_constraintHorizontal_bias="0.736"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        app:layout_constraintVertical_bias="0.349" />
+        app:layout_constraintVertical_bias="0.211" />
 
     <TextView
         android:id="@+id/empty_text"
@@ -126,11 +126,22 @@
         app:layout_constraintTop_toBottomOf="@+id/empty"
         tools:layout_editor_absoluteY="433dp" />
 
+    <Button
+        android:id="@+id/empty_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Загрузить сохраненный"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/empty_text"
+        app:layout_constraintVertical_bias="0.291" />
+
     <android.support.constraint.Group
         android:id="@+id/empty_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="empty,empty_text" />
+        app:constraint_referenced_ids="empty,empty_text,empty_button" />
 
     <EditText
         android:id="@+id/add_product_edit_text"
@@ -142,24 +153,25 @@
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@android:color/background_light"
+        app:layout_constrainedHeight="true"
         android:ems="10"
         android:hint="Продукт"
         android:inputType="textPersonName"
-        android:paddingLeft="8dp"
+        android:padding="10dp"
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+
     <ImageButton
         android:id="@+id/account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="64dp"
         android:layout_marginRight="24dp"
         android:layout_marginTop="16dp"
         android:background="@null"
-        app:layout_constraintEnd_toStartOf="@+id/settings"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar2"
         app:srcCompat="@drawable/ic_account_box_white_24dp" />
 </android.support.constraint.ConstraintLayout>

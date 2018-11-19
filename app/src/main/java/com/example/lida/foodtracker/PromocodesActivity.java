@@ -1,14 +1,21 @@
 package com.example.lida.foodtracker;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.lida.foodtracker.Retrofit.App;
 import com.example.lida.foodtracker.Retrofit.Promocode;
+import com.example.lida.foodtracker.Utils.ProductAdapter;
+import com.example.lida.foodtracker.Utils.PromocodeAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +27,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PromocodesActivity extends BaseActivity {
-    List<String> promocodesTitles;
+    private PromocodeAdapter promocodeAdapter;
+    //List<String> promocodesTitles;
     private List<Promocode> promocodesList;
-    private ArrayAdapter<String> promocodesAdapter;
+    //private ArrayAdapter<String> promocodesAdapter;
     private ListView promocodesListView;
+    private ImageButton accountButton;
 
     @Override
     int getContentViewId() {
@@ -41,16 +50,23 @@ public class PromocodesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_promocodes);
-        promocodesTitles = new ArrayList<String>();
+        //promocodesTitles = new ArrayList<String>();
+        promocodesList = new ArrayList<Promocode>();
+
+        accountButton = findViewById(R.id.account);
+        accountButton.setOnClickListener(accountClickListener);
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
         promocodesListView = (ListView) findViewById(R.id.promocodes_list_view);
-        promocodesAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, promocodesTitles);
+        promocodesListView.setOnItemClickListener(goByUrl);
+        //promocodesAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, promocodesTitles);
 
-        promocodesListView.setAdapter(promocodesAdapter);
+        promocodeAdapter = new PromocodeAdapter(this, R.layout.promocode_list_item, promocodesList);
 
+        //promocodesListView.setAdapter(promocodesAdapter);
+        promocodesListView.setAdapter(promocodeAdapter);
         getPromocodes();
     }
 
@@ -62,12 +78,14 @@ public class PromocodesActivity extends BaseActivity {
             public void onResponse(Call<Map<String, List<Promocode>>> call, Response<Map<String, List<Promocode>>> response) {
                 Map<String, List<Promocode>> promocodesResponse = response.body();
                 Log.d(TAG, "Successful response");
-                List<Promocode> promocodes = promocodesResponse.get("promocodes");
+                promocodesList = promocodesResponse.get("promocodes");
 
-                for (Promocode promocode: promocodes) {
-                    promocodesTitles.add(promocode.toString());
-                }
-                promocodesAdapter.notifyDataSetChanged();
+                //for (Promocode promocode: promocodes) {
+                //    promocodesTitles.add(promocode.toString());
+                //}
+                promocodeAdapter.addAll(promocodesList);
+                promocodesListView.setAdapter(promocodeAdapter);
+                promocodeAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -82,4 +100,21 @@ public class PromocodesActivity extends BaseActivity {
             }
         });
     }
+
+    private AdapterView.OnItemClickListener goByUrl = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Promocode promocode = promocodesList.get(position);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(promocode.getUrl()));
+            startActivity(browserIntent);
+        }
+    };
+
+    View.OnClickListener accountClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent accountIntent = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(accountIntent);
+        }
+    };
 }

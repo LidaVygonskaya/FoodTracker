@@ -18,6 +18,8 @@
     <string name="quantity">Количество</string>
     <string name="promocodes">Акции</string>
     <string name="promocodes_offers">Скидки и акции</string>
+    <string name="my_account">Мой аккаунт</string>
+    <string name="save">Сохранить</string>
 
 
 </resources>
