@@ -95,7 +95,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
                         return;
                     }
                 }
-                imageView.setImageResource(R.drawable.carrot);
+                //imageView.setImageResource(R.drawable.carrot);
             }
 
             @Override

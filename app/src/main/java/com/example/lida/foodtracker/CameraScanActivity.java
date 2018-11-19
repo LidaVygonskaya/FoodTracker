@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyEvent;
@@ -203,7 +204,9 @@ public class CameraScanActivity extends AppCompatActivity {
 
                     final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
                     final EditText numberPicker = (EditText) v.findViewById(R.id.numberPicker);
-                    numberPicker.setText(name[name.length - 2].replace(',', '.'));
+                    if (name[name.length - 2].matches("-?\\d+((\\.|\\,)\\d+)?")) {
+                        numberPicker.setText(name[name.length - 2].replace(',', '.'));
+                    }
 
                     numberPicker.setOnFocusChangeListener(onFocusChangeListener);
                     numberPicker.setOnKeyListener(onEditTextClickListener);

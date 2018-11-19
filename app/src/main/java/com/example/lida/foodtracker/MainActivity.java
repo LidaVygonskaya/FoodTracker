@@ -27,9 +27,12 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -130,7 +133,7 @@ public class MainActivity extends BaseActivity {
         productList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                new AlertDialog.Builder(MainActivity.this)
+                /*new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Удалить объект " + products.get(position).getName() + "?")
                         .setPositiveButton("Удалить", new DialogInterface.OnClickListener() {
                             @Override
@@ -155,7 +158,34 @@ public class MainActivity extends BaseActivity {
                             }
                         })
                         .create().show();
+*/
+                productList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                productList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                    @Override
+                    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 
+                    }
+
+                    @Override
+                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode mode) {
+
+                    }
+                });
                 return true;
             }
         });
