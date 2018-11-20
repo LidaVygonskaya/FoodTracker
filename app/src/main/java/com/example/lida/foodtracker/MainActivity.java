@@ -1,40 +1,27 @@
 package com.example.lida.foodtracker;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -46,13 +33,10 @@ import com.example.lida.foodtracker.Utils.ProductComparator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import de.cketti.mailto.EmailIntentBuilder;
@@ -123,13 +107,11 @@ public class MainActivity extends BaseActivity {
         productList = (ListView) findViewById(R.id.productList);
         productList.setAdapter(productAdapter);
 
-        productAdapter.sort(new ProductComparator());
-        productAdapter.notifyDataSetChanged();
-        //notifyIfNeed();
+        Collections.sort(products, new ProductComparator());
 
         productList.setEmptyView(findViewById(R.id.empty_group));
         ImageView im = (ImageView) findViewById(R.id.empty);
-        //im.setAlpha(0.5f);
+
         productList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -231,7 +213,7 @@ public class MainActivity extends BaseActivity {
             addProductToSharedPref(p);
         }
 
-        productAdapter.sort(new ProductComparator());
+        Collections.sort(products, new ProductComparator());
         productAdapter.notifyDataSetChanged();
         //notifyIfNeed();
     }

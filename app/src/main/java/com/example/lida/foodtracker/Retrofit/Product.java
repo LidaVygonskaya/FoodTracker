@@ -3,10 +3,13 @@ package com.example.lida.foodtracker.Retrofit;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 
 public class Product implements Serializable{
+    private static final int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+
     @SerializedName("bar_code")
     private String barCode;
 
@@ -26,6 +29,8 @@ public class Product implements Serializable{
     private Date dateEnd;
 
     private Integer imgId;
+
+    private Long dayToEnd;
 
     public Product() {}
 
@@ -97,5 +102,20 @@ public class Product implements Serializable{
 
     public String getDateEndInStringFormat() {
         return dateEnd.getDate() + "." + dateEnd.getMonth() + "." + dateEnd.getYear();
+    }
+
+    public Long getDayToEnd() {
+        updateDayToEnd();
+        return dayToEnd;
+    }
+
+    private void updateDayToEnd() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(getDateEnd().getYear(), getDateEnd().getMonth(), getDateEnd().getDate());
+        long start = startDate.getTimeInMillis();
+        Calendar endDate = Calendar.getInstance();
+        long end = endDate.getTimeInMillis();
+
+        dayToEnd = (start - end) / MILLISECONDS_IN_DAY;
     }
 }
