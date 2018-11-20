@@ -1,22 +1,13 @@
 package com.example.lida.foodtracker.Utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.provider.CalendarContract;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,14 +15,7 @@ import com.example.lida.foodtracker.R;
 import com.example.lida.foodtracker.Retrofit.App;
 import com.example.lida.foodtracker.Retrofit.Product;
 
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.zip.Inflater;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -80,8 +64,6 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         Product product = products.get(position);
         txtTitle.setText(product.getName());
 
-
-
         String productBarcode = product.getBarCode() + ".jpg";
         Call<ResponseBody> call = App.getApi().getImage(productBarcode);
 
@@ -95,7 +77,6 @@ public class ProductAdapter extends ArrayAdapter<Product> {
                         return;
                     }
                 }
-                //imageView.setImageResource(R.drawable.carrot);
             }
 
             @Override
@@ -103,19 +84,12 @@ public class ProductAdapter extends ArrayAdapter<Product> {
                 imageView.setImageResource(R.drawable.carrot);
             }
         });
-        //imageView.setImageResource(product.getImgId());
 
-        Calendar startDate = Calendar.getInstance();
-        startDate.set(product.getDateEnd().getYear(), product.getDateEnd().getMonth(), product.getDateEnd().getDate());
-        long start = startDate.getTimeInMillis();
-        Calendar endDate = Calendar.getInstance();
-        long end = endDate.getTimeInMillis();
-
-        Long days = (long) (start - end) / (1000 * 60 * 60 * 24);
+        Long days = product.getDayToEnd();
         String dayToEnd, count;
         if (days < 0) {
             dayToEnd = "<br/>Дней до конца срока годности: " + getColoredSpanned(days.toString(), "#800000");
-        } else if (days > 5) {
+        } else if (days > 10) {
             dayToEnd = "<br/>Дней до конца срока годности: " + getColoredSpanned(days.toString(), "#008000");
         } else {
             dayToEnd = "<br/>Дней до конца срока годности: " + getColoredSpanned(days.toString(), "#f28d18");
@@ -134,9 +108,5 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
     private String getColoredSpanned(String text, String color) {
         return "<font color=" + color + "><b>" + text + "</b></font>";
-    }
-
-    private String getColored(String text, String color) {
-        return "<font color=" + color + ">" + text + "</font>";
     }
 }
