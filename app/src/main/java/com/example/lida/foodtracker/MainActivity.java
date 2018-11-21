@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -421,18 +422,23 @@ public class MainActivity extends BaseActivity {
     }
 
     private void sendEmail() {
-        StringBuilder body = new StringBuilder();
-        body.append("Заказ: \n");
-        for (int i : positions) {
-            body.append(products.get(i).toString());
-            body.append("\n");
+        //TODO: здесь что-то не так
+        sPref = getSharedPreferences("RegisterActivity", MODE_PRIVATE);
+        String phone = sPref.getString("phone", "");
+        String adress = sPref.getString("adress", "");
+        if (phone.isEmpty() || adress.isEmpty()) {
+            Toast.makeText(getApplicationContext(),"Сперва укажите свои данные :)", Toast.LENGTH_SHORT).show();
+        } else {
+            String body = "Какие-то продукты" + "\n\n" + adress + "\n\n" + phone;
+            EmailIntentBuilder.from(this)
+                    .to("food@example.com")
+                    .cc("user@example.com")
+                    .subject("Заказ продуктов")
+                    .body(body)
+                    .start();
+            finish();
+
         }
-        EmailIntentBuilder.from(this)
-                .to("food@example.com")
-                .cc("user@example.com")
-                .subject("Заказ продуктов")
-                .body(body.toString())
-                .start();
     }
 
     private void createOrderDialog() {
@@ -442,6 +448,7 @@ public class MainActivity extends BaseActivity {
                     case Dialog.BUTTON_POSITIVE:
                         sendEmail();
                         dialog.dismiss();
+
                         break;
                     case Dialog.BUTTON_NEUTRAL:
                         dialog.dismiss();
