@@ -70,6 +70,7 @@ public class MainActivity extends BaseActivity {
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
 
+    List<Integer> positions;
     // Идентификатор уведомления
     private static final int NOTIFY_ID = 101;
 
@@ -112,6 +113,8 @@ public class MainActivity extends BaseActivity {
                 0, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         Resources res = this.getResources();
+
+        positions = new ArrayList<>();
 
         loadProducts();
         productAdapter = new ProductAdapter(this, R.layout.product_list_item, products);
@@ -169,12 +172,6 @@ public class MainActivity extends BaseActivity {
                 startActivityForResult(intent, 1);
             }
         });
-
-        List<Product> oldProducts = getOldProducts();
-        if (!oldProducts.isEmpty()) {
-            createEmailDialog();
-        }
-
     }
 
     private void chooseItem(int position, View view) {
@@ -196,15 +193,16 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        getCheckedIds();
         switch (id) {
             case R.id.delete:
-                deleteItems();
+                createDeleteDialog();
                 break;
             case R.id.add_to_shopping_list:
                 //TODO
                 break;
             case R.id.order:
-                //TODO
+                createOrderDialog();
                 break;
         }
         cancel();
@@ -212,13 +210,38 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteItems() {
-        List<Integer> positions = new ArrayList<>();
+    private void getCheckedIds() {
+        positions = new ArrayList<>();
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).isChecked()) {
                 positions.add(i);
             }
         }
+    }
+
+    private void createDeleteDialog() {
+        DialogInterface.OnClickListener myClickListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case Dialog.BUTTON_POSITIVE:
+                        deleteItems();
+                        dialog.dismiss();
+                        break;
+                    case Dialog.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Удалить выделеные элементы?")
+                .setPositiveButton("Удалить", myClickListener)
+                .setNegativeButton("Отмена", myClickListener);
+        builder.create().show();
+    }
+
+    private void deleteItems() {
         for (int i = positions.size() - 1; i >= 0; i--) {
             products.remove(positions.get(i).intValue());
         }
@@ -378,43 +401,24 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private List<Product> getOldProducts() {
-        List<Product> oldProducts = new ArrayList<Product>();
-
-        Calendar startDate = Calendar.getInstance();
-        Calendar endDate = Calendar.getInstance();
-
-        for (Product product: products) {
-            startDate.set(product.getDateEnd().getYear(), product.getDateEnd().getMonth(), product.getDateEnd().getDate());
-            long start = startDate.getTimeInMillis();
-            long end = endDate.getTimeInMillis();
-            Long days = (long) (start - end) / (1000 * 60 * 60 * 24);
-            if (days <= 3) {
-                oldProducts.add(product);
-            }
-        }
-
-        return oldProducts;
-    }
-
-    private void createEmailDialog() {
+    private void createOrderDialog() {
         DialogInterface.OnClickListener myClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case Dialog.BUTTON_POSITIVE:
                         sendEmail();
-                        //finish();
+                        dialog.dismiss();
+
                         break;
                     case Dialog.BUTTON_NEUTRAL:
-                        finish();
+                        dialog.dismiss();
                         break;
                 }
             }
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Заказ продуктов")
-                .setMessage("Кажется некоторые из продуктов скоро испортятся. Заказать?")
+                .setTitle("Заказ продуктов в магазине")
                 .setPositiveButton("Купить", myClickListener)
                 .setNegativeButton("Отмена", myClickListener);
         builder.create().show();
