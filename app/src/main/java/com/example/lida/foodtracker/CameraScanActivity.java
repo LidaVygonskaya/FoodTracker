@@ -241,9 +241,6 @@ public class CameraScanActivity extends AppCompatActivity {
                     });
                     spinner.setSelection(idCount);
 
-
-
-
                     mBuilder.setView(v);
 
                     mBuilder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
@@ -410,7 +407,7 @@ public class CameraScanActivity extends AppCompatActivity {
         product.setQuantity(Double.parseDouble(quantity.getText().toString()));
         product.setName(name.getText().toString());
         product.setDescription("smth description");
-        product.setImgId(R.drawable.carrot);
+        product.setImgId(R.mipmap.food);
         product.setQuantityChoise(spin);
         product.setBarCode(barCode);
         //TODO: set composition!! Сейчас она не выставляется. Надо найти проблемное место скорее всего это здесь

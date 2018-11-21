@@ -99,7 +99,6 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                imageView.setImageResource(R.drawable.carrot);
             }
         });
 
