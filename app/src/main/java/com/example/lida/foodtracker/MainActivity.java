@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -358,12 +359,23 @@ public class MainActivity extends BaseActivity {
     }
 
     private void sendEmail() {
-        EmailIntentBuilder.from(this)
-                .to("food@example.com")
-                .cc("user@example.com")
-                .subject("Заказ продуктов")
-                .body("Какие-то продукты")
-                .start();
+        //TODO: здесь что-то не так
+        sPref = getSharedPreferences("RegisterActivity", MODE_PRIVATE);
+        String phone = sPref.getString("phone", "");
+        String adress = sPref.getString("adress", "");
+        if (phone.isEmpty() || adress.isEmpty()) {
+            Toast.makeText(getApplicationContext(),"Сперва укажите свои данные :)", Toast.LENGTH_SHORT).show();
+        } else {
+            String body = "Какие-то продукты" + "\n\n" + adress + "\n\n" + phone;
+            EmailIntentBuilder.from(this)
+                    .to("food@example.com")
+                    .cc("user@example.com")
+                    .subject("Заказ продуктов")
+                    .body(body)
+                    .start();
+            finish();
+
+        }
     }
 
     private List<Product> getOldProducts() {
@@ -391,7 +403,7 @@ public class MainActivity extends BaseActivity {
                 switch (which) {
                     case Dialog.BUTTON_POSITIVE:
                         sendEmail();
-                        finish();
+                        //finish();
                         break;
                     case Dialog.BUTTON_NEUTRAL:
                         finish();
