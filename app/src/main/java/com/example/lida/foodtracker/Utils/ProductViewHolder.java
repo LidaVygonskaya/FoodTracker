@@ -6,29 +6,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ProductViewHolder {
-   // private CheckBox checkBox;
     private TextView txtTitle;
     private TextView extraTxt;
     private ImageView imageView;
 
-    public ProductViewHolder() {}
-
-    public ProductViewHolder(TextView txtTitle, ImageView imageView, TextView extraTxt/*, CheckBox checkBox*/) {
-     //   this.checkBox = checkBox;
+    public ProductViewHolder(TextView txtTitle, ImageView imageView, TextView extraTxt) {
         this.txtTitle = txtTitle;
         this.extraTxt = extraTxt;
         this.imageView = imageView;
     }
 
-   /* public CheckBox getCheckBox() {
-        checkBox.setVisibility(View.VISIBLE);
-        checkBox.setFocusable(false);
-        return checkBox;
-    }
-
-    public void setCheckBox(CheckBox checkBox) {
-        this.checkBox = checkBox;
-    }*/    public TextView getTxtTitle() {
+    public TextView getTxtTitle() {
         return txtTitle;
     }
 
