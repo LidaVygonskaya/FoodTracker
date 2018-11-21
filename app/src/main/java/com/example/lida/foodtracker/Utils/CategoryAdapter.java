@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lida.foodtracker.R;
@@ -50,8 +51,49 @@ public class CategoryAdapter extends ArrayAdapter<Category>{
         }
 
         TextView txtTitle = (TextView) view.findViewById(R.id.item);
+        ImageView imageView = view.findViewById(R.id.icon);
 
         Category category = categories.get(position);
+        Integer categoryId = category.getId();
+        switch (categoryId) {
+            case 1:
+                imageView.setImageResource(R.mipmap.salad);
+                break;
+
+            case 2:
+                imageView.setImageResource(R.mipmap.soup);
+                break;
+
+            case 3:
+                imageView.setImageResource(R.mipmap.second);
+                break;
+
+            case 4:
+                imageView.setImageResource(R.mipmap.cake);
+                break;
+
+            case 5:
+                imageView.setImageResource(R.mipmap.dessert);
+                break;
+
+            case 6:
+                imageView.setImageResource(R.mipmap.drink);
+                break;
+
+            case 7:
+                imageView.setImageResource(R.mipmap.baby);
+                break;
+
+            case 8:
+                imageView.setImageResource(R.mipmap.book);
+                break;
+
+            case 9:
+                imageView.setImageResource(R.mipmap.other);
+                break;
+
+
+        }
         txtTitle.setText(category.getName());
         return view;
 

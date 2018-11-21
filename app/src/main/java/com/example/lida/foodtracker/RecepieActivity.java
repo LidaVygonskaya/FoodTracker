@@ -11,6 +11,7 @@ import com.example.lida.foodtracker.Retrofit.Category;
 import com.example.lida.foodtracker.Retrofit.Recepie;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class RecepieActivity extends AppCompatActivity {
     private TextView title;
@@ -29,11 +30,56 @@ public class RecepieActivity extends AppCompatActivity {
         title.setText(convertToNormal(recepie.getName()));
 
         ingridientsTextView = findViewById(R.id.ingredients_list);
-        ingridientsTextView.setText(recepie.getIngredients());
+        String ingredientsString = recepie.getIngredients();
+        if (ingredientsString.isEmpty()) {
+            ingredientsString = "Упс! Кажется здесь пусто. Полный список продуктов указан в Приготовлении";
+
+        } else {
+            String[] arrayIngredients = ingredientsString.split(",");
+            StringBuilder ingredientsBuilder = new StringBuilder();
+            for (String elem: arrayIngredients) {
+                if (elem.startsWith(" ")) {
+                    elem = elem.substring(1);
+                }
+                ingredientsBuilder.append(elem);
+                ingredientsBuilder.append(System.getProperty("line.separator"));
+                ingredientsBuilder.append(System.getProperty("line.separator"));
+            }
+
+            ingredientsString = ingredientsBuilder.toString();
+            ingredientsString = ingredientsString.replaceAll("\\\\n   \\\\n    \\\\n      ", "\n\n");
+            ingredientsString = ingredientsString.replaceAll("\\\\n\\\\n ", "");
+            ingredientsString = ingredientsString.replaceAll("\\\\n\\\\n", "");
+            ingredientsString = ingredientsString.replaceAll("\\\\n", "");
+            ingredientsString = ingredientsString.replaceAll(" {23}", "");
+            ingredientsString = ingredientsString.replaceAll("Ингредиенты:", "");
+            ingredientsString = ingredientsString.replaceAll("^\\s+", "");
+
+        }
+        ingridientsTextView.setText(ingredientsString);
 
         instructionTextView = findViewById(R.id.instruction_list);
-        instructionTextView.setText(recepie.getInstruction());
 
+        String instruction;
+        String [] arrayInstruction = recepie.getInstruction().split("(?<=\\.)");
+        StringBuilder instructionBuilder = new StringBuilder();
+        for (String elem: arrayInstruction) {
+            if (elem.startsWith(" ")) {
+                elem = elem.substring(1);
+            }
+            instructionBuilder.append(elem);
+            instructionBuilder.append(System.getProperty("line.separator"));
+            instructionBuilder.append(System.getProperty("line.separator"));
+            //instructionBuilder.append(System.getProperty("line.separator"));
+        }
+        instruction = instructionBuilder.toString();
+        instruction = instruction.replaceAll("\\\\n   \\\\n    \\\\n      ", "\n\n");
+        instruction = instruction.replaceAll("\\\\n\\\\n ", "");
+        instruction = instruction.replaceAll("\\\\n\\\\n", "");
+        instruction = instruction.replaceAll("\\\\n", "");
+        instruction = instruction.replaceAll("Инструкции:", "");
+        instruction = instruction.replaceAll("^\\s+", "");
+        instructionTextView.setText(instruction);
 
 
         closeButton = findViewById(R.id.exit);
