@@ -16,16 +16,20 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.lida.foodtracker.Retrofit.Product;
 import com.example.lida.foodtracker.Utils.ProductAdapter;
@@ -48,6 +52,7 @@ public class MainActivity extends BaseActivity {
 
     private ImageButton settingsButton;
     private ImageButton accountButton;
+    private ImageButton cancelButton;
 
     private ProductAdapter productAdapter;
     private List<Product> products;
@@ -87,6 +92,10 @@ public class MainActivity extends BaseActivity {
         accountButton = (ImageButton) findViewById(R.id.account);
         accountButton.setOnClickListener(accountClickListener);
 
+        cancelButton = (ImageButton) findViewById(R.id.cancel);
+        cancelButton.setOnClickListener(cancelClickListener);
+        cancelButton.setVisibility(View.INVISIBLE);
+
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
@@ -99,10 +108,11 @@ public class MainActivity extends BaseActivity {
         Resources res = this.getResources();
 
         loadProducts();
-        productAdapter = new ProductAdapter(this, R.layout.product_list_item, products);
+        productAdapter = new ProductAdapter(this, R.layout.product_list_item_multiplechoice, products);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         productList = (ListView) findViewById(R.id.productList);
         productList.setAdapter(productAdapter);
@@ -142,41 +152,24 @@ public class MainActivity extends BaseActivity {
                         .create().show();
 */
                 productList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-                productList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                    @Override
-                    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 
-                    }
+                settingsButton.setVisibility(View.INVISIBLE);
+                accountButton.setVisibility(View.INVISIBLE);
+                cancelButton.setVisibility(View.VISIBLE);
 
-                    @Override
-                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onDestroyActionMode(ActionMode mode) {
-
-                    }
-                });
                 return true;
             }
         });
         productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
-                intent.putExtra("PRODUCT", products.get(position));
-                startActivity(intent);
+                if (settingsButton.getVisibility() == View.VISIBLE) {
+                    Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
+                    intent.putExtra("PRODUCT", products.get(position));
+                    startActivity(intent);
+                } else {
+                    //TODO
+                }
             }
         });
 
@@ -194,6 +187,38 @@ public class MainActivity extends BaseActivity {
             createEmailDialog();
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.delete:
+                //TODO
+                break;
+            case R.id.add_to_shopping_list:
+                //TODO
+                break;
+            case R.id.order:
+                //TODO
+                break;
+        }
+        settingsButton.setVisibility(View.VISIBLE);
+        accountButton.setVisibility(View.VISIBLE);
+        cancelButton.setVisibility(View.INVISIBLE);
+
+        productList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        productAdapter.toMultipleChoise();
+        productAdapter.notifyDataSetChanged();
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -313,6 +338,13 @@ public class MainActivity extends BaseActivity {
         public void onClick(View v) {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
+        }
+    };
+
+    View.OnClickListener cancelClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //TODO
         }
     };
 

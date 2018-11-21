@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +28,8 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
     private final List<Product> products;
     private LayoutInflater layoutInflater;
+
+    View view;
 
     public ProductAdapter(Context context, int textViewResourceId, List<Product> products) {
         super(context, textViewResourceId, products);
@@ -52,9 +55,9 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
+        view = convertView;
         if (view == null) {
-            view = layoutInflater.inflate(R.layout.product_list_item, parent, false);
+            view = layoutInflater.inflate(R.layout.product_list_item_multiplechoice, parent, false);
         }
 
         TextView txtTitle = (TextView) view.findViewById(R.id.item);
@@ -108,5 +111,15 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
     private String getColoredSpanned(String text, String color) {
         return "<font color=" + color + "><b>" + text + "</b></font>";
+    }
+
+    public void toMultipleChoise() {
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
+        checkBox.setVisibility(View.VISIBLE);
+    }
+
+    public void toSingleChoise() {
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
+        checkBox.setVisibility(View.INVISIBLE);
     }
 }

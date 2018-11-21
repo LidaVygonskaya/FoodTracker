@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.MainActivity">
+
+    <item
+        android:id="@+id/delete"
+        android:title="@string/delete"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/order"
+        android:title="@string/order"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/add_to_shopping_list"
+        android:title="@string/add_to_shopping_list"
+        app:showAsAction="never"/>
+</menu>

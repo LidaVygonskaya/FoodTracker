@@ -20,6 +20,9 @@
     <string name="promocodes_offers">Скидки и акции</string>
     <string name="my_account">Мой аккаунт</string>
     <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
+    <string name="order">Заказать</string>
+    <string name="add_to_shopping_list">Добавить в список покупок</string>
 
 
 </resources>
