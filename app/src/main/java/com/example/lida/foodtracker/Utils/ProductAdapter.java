@@ -118,6 +118,10 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         checkBox.setVisibility(View.VISIBLE);
     }
 
+    public void setCheckBoxVisible() {
+        //View view = layoutInflater.inflate(R.layout.product_list_item_multiplechoice, parent, false);
+    }
+
     public void toSingleChoise() {
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
         checkBox.setVisibility(View.INVISIBLE);

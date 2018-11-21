@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,9 +16,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -125,6 +128,7 @@ public class MainActivity extends BaseActivity {
         productList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
                 /*new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Удалить объект " + products.get(position).getName() + "?")
                         .setPositiveButton("Удалить", new DialogInterface.OnClickListener() {
@@ -156,6 +160,13 @@ public class MainActivity extends BaseActivity {
                 settingsButton.setVisibility(View.INVISIBLE);
                 accountButton.setVisibility(View.INVISIBLE);
                 cancelButton.setVisibility(View.VISIBLE);
+
+                //LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                //View vi = inflater.inflate(R.layout.product_list_item_multiplechoice, null);
+                //RecyclerView.ViewHolder viewHolderh = new RecyclerView.ViewHolder();
+                //viewHolderh.checkbox = covertView.findView
+                CheckBox checkBox = view.findViewById(R.id.checkbox);
+                checkBox.setVisibility(View.INVISIBLE);
 
                 return true;
             }
