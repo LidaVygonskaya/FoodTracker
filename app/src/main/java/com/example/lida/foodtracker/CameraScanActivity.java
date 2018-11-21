@@ -91,7 +91,7 @@ public class CameraScanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_scan);
 
-        Toolbar toolbar = findViewById(R.id.toolbar2);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Добавление продукта");
         setSupportActionBar(toolbar);
 

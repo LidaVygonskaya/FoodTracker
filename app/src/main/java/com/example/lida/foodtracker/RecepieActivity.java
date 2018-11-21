@@ -31,6 +31,15 @@ public class RecepieActivity extends AppCompatActivity {
         toolbar.setTitle(convertToNormal(recepie.getName()));
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         ingridientsTextView = findViewById(R.id.ingredients_list);
         String ingredientsString = recepie.getIngredients();
         if (ingredientsString.isEmpty()) {
@@ -83,9 +92,6 @@ public class RecepieActivity extends AppCompatActivity {
         instruction = instruction.replaceAll("^\\s+", "");
         instructionTextView.setText(instruction);
 
-
-        closeButton = findViewById(R.id.exit);
-        closeButton.setOnClickListener(v -> finish());
     }
 
     private String convertToNormal(String str) {
