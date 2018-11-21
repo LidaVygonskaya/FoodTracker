@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
     private final List<Product> products;
     private LayoutInflater layoutInflater;
 
-    View view;
+    private boolean isMultipleChoise = false;
 
     public ProductAdapter(Context context, int textViewResourceId, List<Product> products) {
         super(context, textViewResourceId, products);
@@ -55,16 +56,50 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        view = convertView;
-        if (view == null) {
-            view = layoutInflater.inflate(R.layout.product_list_item_multiplechoice, parent, false);
-        }
-
-        TextView txtTitle = (TextView) view.findViewById(R.id.item);
-        ImageView imageView = (ImageView) view.findViewById(R.id.icon);
-        TextView extraTxt = (TextView) view.findViewById(R.id.content);
+        View view = convertView;
 
         Product product = products.get(position);
+
+        TextView txtTitle;
+        ImageView imageView;
+        TextView extraTxt;
+        //CheckBox checkBox;
+
+        if (view == null) {
+            view = layoutInflater.inflate(R.layout.product_list_item/*_multiplechoice*/, parent, false);
+
+            txtTitle = (TextView) view.findViewById(R.id.item);
+            imageView = (ImageView) view.findViewById(R.id.icon);
+            extraTxt = (TextView) view.findViewById(R.id.content);
+         //   checkBox = (CheckBox) view.findViewById(R.id.checkbox);
+
+            view.setTag(new ProductViewHolder(txtTitle, imageView, extraTxt/*, checkBox*/));
+
+            /*checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox) v;
+                    Product product = (Product) cb.getTag();
+                    product.setChecked(cb.isChecked());
+                }
+            });*/
+        } else {
+            ProductViewHolder viewHolder = (ProductViewHolder) view.getTag();
+            //checkBox = viewHolder.getCheckBox();
+            txtTitle = viewHolder.getTxtTitle();
+            extraTxt = viewHolder.getExtraTxt();
+            imageView = viewHolder.getImageView();
+        }
+
+       /* checkBox.setTag(product);
+
+        if (isMultipleChoise) {
+            checkBox.setVisibility(View.VISIBLE);
+        } else {
+            checkBox.setVisibility(View.INVISIBLE);
+        }
+
+        checkBox.setChecked(product.isChecked());*/
         txtTitle.setText(product.getName());
 
         String productBarcode = product.getBarCode() + ".jpg";
@@ -104,7 +139,6 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         }
 
         txtTitle.setText(product.getName());
-
         extraTxt.setText(Html.fromHtml(count + dayToEnd));
         return view;
     }
@@ -113,17 +147,11 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         return "<font color=" + color + "><b>" + text + "</b></font>";
     }
 
-    public void toMultipleChoise() {
-        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
-        checkBox.setVisibility(View.VISIBLE);
+    public void setMultipleChoise(boolean isMultipleChoise) {
+        this.isMultipleChoise = isMultipleChoise;
     }
 
-    public void setCheckBoxVisible() {
-        //View view = layoutInflater.inflate(R.layout.product_list_item_multiplechoice, parent, false);
-    }
-
-    public void toSingleChoise() {
-        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
-        checkBox.setVisibility(View.INVISIBLE);
+    public boolean isMultipleChoise() {
+        return isMultipleChoise;
     }
 }

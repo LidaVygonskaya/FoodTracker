@@ -32,6 +32,8 @@ public class Product implements Serializable{
 
     private Long dayToEnd;
 
+    private boolean checked = false;
+
     public Product() {}
 
     public Product(String name, String description, Double count, String quantityChoise, Date date, Integer imgId) {
@@ -41,6 +43,17 @@ public class Product implements Serializable{
         this.quantityChoise = quantityChoise;
         this.dateEnd = date;
         this.imgId = imgId;
+        this.checked = false;
+    }
+
+    public Product(String name, String description, Double count, String quantityChoise, Date date, Integer imgId, boolean checked) {
+        this.name = name;
+        this.description = description;
+        this.quantity = count;
+        this.quantityChoise = quantityChoise;
+        this.dateEnd = date;
+        this.imgId = imgId;
+        this.checked = checked;
     }
 
     @Override
@@ -118,4 +131,10 @@ public class Product implements Serializable{
 
         dayToEnd = (start - end) / MILLISECONDS_IN_DAY;
     }
+
+    public boolean isChecked() { return checked; }
+
+    public void setChecked(boolean checked) { this.checked = checked; }
+
+    public void toggleChecked() { checked = !checked; }
 }
