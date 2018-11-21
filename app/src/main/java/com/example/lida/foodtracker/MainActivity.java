@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 import com.example.lida.foodtracker.Retrofit.Product;
 import com.example.lida.foodtracker.Utils.ProductAdapter;
 import com.example.lida.foodtracker.Utils.ProductComparator;
+import com.example.lida.foodtracker.Utils.ProductViewHolder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -111,7 +113,7 @@ public class MainActivity extends BaseActivity {
         Resources res = this.getResources();
 
         loadProducts();
-        productAdapter = new ProductAdapter(this, R.layout.product_list_item_multiplechoice, products);
+        productAdapter = new ProductAdapter(this, R.layout.product_list_item, products);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
@@ -128,45 +130,18 @@ public class MainActivity extends BaseActivity {
         productList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                /*new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Удалить объект " + products.get(position).getName() + "?")
-                        .setPositiveButton("Удалить", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                products.remove(position);
-                                productAdapter.notifyDataSetChanged();
-                                //notifyIfNeed();
-
-                                Gson gson = new Gson();
-                                SharedPreferences.Editor editor = sPref.edit();
-                                String json = gson.toJson(products);
-                                editor.putString(productsSharedKey, json);
-                                editor.apply();
-
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create().show();
-*/
                 productList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
                 settingsButton.setVisibility(View.INVISIBLE);
                 accountButton.setVisibility(View.INVISIBLE);
                 cancelButton.setVisibility(View.VISIBLE);
 
-                //LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                //View vi = inflater.inflate(R.layout.product_list_item_multiplechoice, null);
-                //RecyclerView.ViewHolder viewHolderh = new RecyclerView.ViewHolder();
-                //viewHolderh.checkbox = covertView.findView
-                CheckBox checkBox = view.findViewById(R.id.checkbox);
-                checkBox.setVisibility(View.INVISIBLE);
+                productAdapter.setMultipleChoise(true);
+
+                for (Product product : products) {
+                    product.setChecked(false);
+                }
+                chooseItem(position, view);
 
                 return true;
             }
@@ -174,12 +149,12 @@ public class MainActivity extends BaseActivity {
         productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (settingsButton.getVisibility() == View.VISIBLE) {
+                if (!productAdapter.isMultipleChoise()) {
                     Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
                     intent.putExtra("PRODUCT", products.get(position));
                     startActivity(intent);
                 } else {
-                    //TODO
+                    chooseItem(position, view);
                 }
             }
         });
@@ -200,6 +175,16 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    private void chooseItem(int position, View view) {
+        Product product = productAdapter.getItem(position);
+        product.toggleChecked();
+        if (product.isChecked()) {
+            view.setBackgroundColor(Color.rgb(204,204,204));
+        } else {
+            view.setBackgroundColor(Color.WHITE);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
@@ -211,7 +196,7 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.delete:
-                //TODO
+                deleteItems();
                 break;
             case R.id.add_to_shopping_list:
                 //TODO
@@ -220,16 +205,28 @@ public class MainActivity extends BaseActivity {
                 //TODO
                 break;
         }
-        settingsButton.setVisibility(View.VISIBLE);
-        accountButton.setVisibility(View.VISIBLE);
-        cancelButton.setVisibility(View.INVISIBLE);
-
-        productList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        productAdapter.toMultipleChoise();
-        productAdapter.notifyDataSetChanged();
-
+        cancel();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteItems() {
+        List<Integer> positions = new ArrayList<>();
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).isChecked()) {
+                positions.add(i);
+            }
+        }
+        for (int i = positions.size() - 1; i >= 0; i--) {
+            products.remove(positions.get(i).intValue());
+        }
+        productAdapter.notifyDataSetChanged();
+
+        Gson gson = new Gson();
+        SharedPreferences.Editor editor = sPref.edit();
+        String json = gson.toJson(products);
+        editor.putString(productsSharedKey, json);
+        editor.apply();
     }
 
     @Override
@@ -252,23 +249,6 @@ public class MainActivity extends BaseActivity {
         Collections.sort(products, new ProductComparator());
         productAdapter.notifyDataSetChanged();
         //notifyIfNeed();
-    }
-
-    private void notifyIfNeed() {
-        notificationManager.cancelAll();
-
-        Calendar startDate = Calendar.getInstance();
-        Calendar endDate = Calendar.getInstance();
-
-        for (Product product : products) {
-            startDate.set(product.getDateEnd().getYear(), product.getDateEnd().getMonth(), product.getDateEnd().getDate());
-            long start = startDate.getTimeInMillis();
-            long end = endDate.getTimeInMillis();
-            Long days = (long) (start - end) / (1000 * 60 * 60 * 24);
-            if (days <= 5) {
-                break;
-            }
-        }
     }
 
     private void loadProducts() {
@@ -355,10 +335,25 @@ public class MainActivity extends BaseActivity {
     View.OnClickListener cancelClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //TODO
+            cancel();
         }
     };
 
+    private void cancel() {
+        for (int position = 0; position < products.size(); position++) {
+            Product product = productAdapter.getItem(position);
+            product.setChecked(false);
+
+            productList.setBackgroundColor(Color.WHITE);
+        }
+        productList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        settingsButton.setVisibility(View.VISIBLE);
+        accountButton.setVisibility(View.VISIBLE);
+        cancelButton.setVisibility(View.INVISIBLE);
+
+        productAdapter.setMultipleChoise(false);
+    }
 
     private void sendEmail() {
         EmailIntentBuilder.from(this)
