@@ -42,6 +42,7 @@ import com.example.lida.foodtracker.Utils.ProductViewHolder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -192,15 +193,17 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        getCheckedIds();
         switch (id) {
             case R.id.delete:
+                getCheckedIds();
                 createDeleteDialog();
                 break;
             case R.id.add_to_shopping_list:
-                //TODO
+                getCheckedIds();
+                createAddToShoppingListDialog();
                 break;
             case R.id.order:
+                getCheckedIds();
                 createOrderDialog();
                 break;
         }
@@ -216,6 +219,43 @@ public class MainActivity extends BaseActivity {
                 positions.add(i);
             }
         }
+    }
+
+    private void addToShoppingList() {
+        List<String> newProducts = new ArrayList<>();
+        for (int i : positions) {
+            newProducts.add(products.get(i).toString());
+        }
+
+        Intent intent = new Intent(getApplicationContext(), ShoppingListActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("SHOPPING_LIST", (Serializable) newProducts);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+
+        startActivity(intent);
+    }
+
+    private void createAddToShoppingListDialog() {
+        DialogInterface.OnClickListener myClickListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case Dialog.BUTTON_POSITIVE:
+                        addToShoppingList();
+                        dialog.dismiss();
+                        break;
+                    case Dialog.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Добавить в список покупок?")
+                .setPositiveButton("Добавить", myClickListener)
+                .setNegativeButton("Отмена", myClickListener);
+        builder.create().show();
     }
 
     private void createDeleteDialog() {

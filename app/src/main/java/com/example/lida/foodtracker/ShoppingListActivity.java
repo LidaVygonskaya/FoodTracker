@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -267,6 +268,17 @@ public class ShoppingListActivity extends BaseActivity {
 
     private void loadShoppingList() {
         productList = new ArrayList<>();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            List<String> resultList = (ArrayList<String>) bundle.getSerializable("SHOPPING_LIST");
+
+            if (resultList != null) {
+                for (String p : resultList) {
+                    addItemToSharedPref(p);
+                }
+            }
+        }
 
         if (sPref.contains(shoppingListSharedKey)) {
             Gson gson = new Gson();
