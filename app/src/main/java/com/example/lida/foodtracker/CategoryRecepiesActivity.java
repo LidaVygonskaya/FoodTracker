@@ -36,11 +36,12 @@ public class CategoryRecepiesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category_recepies);
         category = (Category) getIntent().getExtras().getSerializable("CATEGORY");
         toolbar = findViewById(R.id.toolbar2);
+        toolbar.setTitle(category.getName());
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        titleTextView = findViewById(R.id.title_view);
-        titleTextView.setText(category.getName());
 
         closeButton = findViewById(R.id.exit);
         closeButton.setOnClickListener(v -> finish());
@@ -81,7 +82,7 @@ public class CategoryRecepiesActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 recepieAdapter.getFilter().filter(newText);
-                titleTextView.setVisibility(View.INVISIBLE);
+                //titleTextView.setVisibility(View.INVISIBLE);
                 return false;
             }
 
@@ -90,7 +91,7 @@ public class CategoryRecepiesActivity extends AppCompatActivity {
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                titleTextView.setVisibility(View.VISIBLE);
+                //titleTextView.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -103,7 +104,7 @@ public class CategoryRecepiesActivity extends AppCompatActivity {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                titleTextView.setVisibility(View.VISIBLE);
+                //titleTextView.setVisibility(View.VISIBLE);
 
                 return true;
             }

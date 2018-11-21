@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -21,6 +22,11 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        Toolbar toolbar = findViewById(R.id.toolbar2);
+        toolbar.setTitle("Настройки");
+        setSupportActionBar(toolbar);
+
         closeButton = findViewById(R.id.exit);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override

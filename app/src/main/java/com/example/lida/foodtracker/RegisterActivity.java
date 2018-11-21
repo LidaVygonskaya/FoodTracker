@@ -3,6 +3,7 @@ package com.example.lida.foodtracker;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         closeButton = (ImageButton) findViewById(R.id.exit);
         closeButton.setOnClickListener(closeButtonClickListener);
+
+        Toolbar toolbar = findViewById(R.id.toolbar2);
+        toolbar.setTitle("Мой аккаунт");
+        setSupportActionBar(toolbar);
     }
 
     View.OnClickListener saveButtonClickListener = new View.OnClickListener() {

@@ -27,32 +27,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteY="0dp" />
 
-<!--
-    <ImageButton
-        android:id="@+id/settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@null"
-        android:src="@drawable/ic_settings_white_24dp"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar2"
-        app:layout_constraintTop_toTopOf="@+id/toolbar2" />-->
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="19dp"
-        android:text="@string/shopping_list"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/app_bap_text_size"
-        app:layout_constraintStart_toStartOf="@+id/toolbar2"
-        app:layout_constraintTop_toTopOf="@+id/toolbar2" />
-
 
     <ListView
         android:id="@+id/shopp_list"

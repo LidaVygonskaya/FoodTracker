@@ -32,20 +32,7 @@
         app:layout_constraintTop_toTopOf="@+id/toolbar2"
         android:visibility="invisible"/>
 
-    <TextView
-        android:id="@+id/title_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="19dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="19dp"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/app_bap_text_size"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar2"
-        app:layout_constraintStart_toStartOf="@+id/toolbar2"
-        app:layout_constraintTop_toTopOf="@+id/toolbar2"
-        app:layout_constraintVertical_bias="1.0" />
+
 
     <ListView
         android:id="@+id/recepies_list"

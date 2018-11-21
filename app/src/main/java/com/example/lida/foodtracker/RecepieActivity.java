@@ -3,6 +3,7 @@ package com.example.lida.foodtracker;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,8 +27,9 @@ public class RecepieActivity extends AppCompatActivity {
 
         recepie = (Recepie) getIntent().getExtras().getSerializable("RECEPIE");
 
-        title = findViewById(R.id.title_view);
-        title.setText(convertToNormal(recepie.getName()));
+        Toolbar toolbar = findViewById(R.id.toolbar2);
+        toolbar.setTitle(convertToNormal(recepie.getName()));
+        setSupportActionBar(toolbar);
 
         ingridientsTextView = findViewById(R.id.ingredients_list);
         String ingredientsString = recepie.getIngredients();

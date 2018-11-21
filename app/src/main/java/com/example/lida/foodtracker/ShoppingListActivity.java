@@ -79,6 +79,7 @@ public class ShoppingListActivity extends BaseActivity {
     private SharedPreferences sPref;
     private String shoppingListSharedKey = "ShoppingList";
     private String favouriteShoppingKey = "Favourite_list";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,8 +110,9 @@ public class ShoppingListActivity extends BaseActivity {
         //im.setAlpha(50);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        toolbar.setTitle("Список покупок");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         loadShoppingList();
 

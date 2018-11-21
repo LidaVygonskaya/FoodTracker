@@ -30,21 +30,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="19dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="19dp"
-        android:text="Добавление продукта"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/app_bap_text_size"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="1.0" />
 
     <ImageButton
         android:id="@+id/exit"

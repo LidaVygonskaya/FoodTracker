@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.support.v7.widget.Toolbar;
 
 import com.example.lida.foodtracker.Retrofit.App;
 import com.example.lida.foodtracker.Retrofit.Promocode;
@@ -50,6 +51,10 @@ public class PromocodesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_promocodes);
+        Toolbar toolbar = findViewById(R.id.toolbar2);
+        toolbar.setTitle("Скидки и акции");
+        setSupportActionBar(toolbar);
+
         //promocodesTitles = new ArrayList<String>();
         promocodesList = new ArrayList<Promocode>();
 

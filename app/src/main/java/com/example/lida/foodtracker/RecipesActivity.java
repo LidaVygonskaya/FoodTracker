@@ -8,12 +8,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+
 
 import com.example.lida.foodtracker.Retrofit.Category;
 import com.example.lida.foodtracker.Retrofit.Product;
@@ -58,6 +60,9 @@ public class RecipesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
+        Toolbar toolbar = findViewById(R.id.toolbar2);
+        toolbar.setTitle("Рецепты");
+        setSupportActionBar(toolbar);
 
         DataBaseHelper myDbHelper = new DataBaseHelper(getApplicationContext());
         categories = myDbHelper.getCategories();

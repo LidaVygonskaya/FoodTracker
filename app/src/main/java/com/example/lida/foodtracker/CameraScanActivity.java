@@ -38,6 +38,7 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.example.lida.foodtracker.Retrofit.App;
 import com.example.lida.foodtracker.Retrofit.Product;
@@ -89,6 +90,10 @@ public class CameraScanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_scan);
+
+        Toolbar toolbar = findViewById(R.id.toolbar2);
+        toolbar.setTitle("Добавление продукта");
+        setSupportActionBar(toolbar);
 
         preview = (FrameLayout) findViewById(R.id.camera_view);
 

@@ -114,8 +114,8 @@ public class MainActivity extends BaseActivity {
         productAdapter = new ProductAdapter(this, R.layout.product_list_item_multiplechoice, products);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        toolbar.setTitle("Мой холодильник");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         productList = (ListView) findViewById(R.id.productList);
         productList.setAdapter(productAdapter);
