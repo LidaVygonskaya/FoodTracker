@@ -63,43 +63,23 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         TextView txtTitle;
         ImageView imageView;
         TextView extraTxt;
-        //CheckBox checkBox;
 
         if (view == null) {
-            view = layoutInflater.inflate(R.layout.product_list_item/*_multiplechoice*/, parent, false);
+            view = layoutInflater.inflate(R.layout.product_list_item, parent, false);
 
             txtTitle = (TextView) view.findViewById(R.id.item);
             imageView = (ImageView) view.findViewById(R.id.icon);
             extraTxt = (TextView) view.findViewById(R.id.content);
-         //   checkBox = (CheckBox) view.findViewById(R.id.checkbox);
 
-            view.setTag(new ProductViewHolder(txtTitle, imageView, extraTxt/*, checkBox*/));
+            view.setTag(new ProductViewHolder(txtTitle, imageView, extraTxt));
 
-            /*checkBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CheckBox cb = (CheckBox) v;
-                    Product product = (Product) cb.getTag();
-                    product.setChecked(cb.isChecked());
-                }
-            });*/
         } else {
             ProductViewHolder viewHolder = (ProductViewHolder) view.getTag();
-            //checkBox = viewHolder.getCheckBox();
             txtTitle = viewHolder.getTxtTitle();
             extraTxt = viewHolder.getExtraTxt();
             imageView = viewHolder.getImageView();
         }
 
-       /* checkBox.setTag(product);
-
-        if (isMultipleChoise) {
-            checkBox.setVisibility(View.VISIBLE);
-        } else {
-            checkBox.setVisibility(View.INVISIBLE);
-        }
-
-        checkBox.setChecked(product.isChecked());*/
         txtTitle.setText(product.getName());
 
         String productBarcode = product.getBarCode() + ".jpg";

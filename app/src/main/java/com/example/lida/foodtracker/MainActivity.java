@@ -135,6 +135,7 @@ public class MainActivity extends BaseActivity {
                 settingsButton.setVisibility(View.INVISIBLE);
                 accountButton.setVisibility(View.INVISIBLE);
                 cancelButton.setVisibility(View.VISIBLE);
+                addProductButton.setVisibility(View.INVISIBLE);
 
                 productAdapter.setMultipleChoise(true);
 
@@ -344,13 +345,14 @@ public class MainActivity extends BaseActivity {
             Product product = productAdapter.getItem(position);
             product.setChecked(false);
 
-            productList.setBackgroundColor(Color.WHITE);
+            getViewByPosition(position).setBackgroundColor(Color.WHITE);
         }
         productList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         settingsButton.setVisibility(View.VISIBLE);
         accountButton.setVisibility(View.VISIBLE);
         cancelButton.setVisibility(View.INVISIBLE);
+        addProductButton.setVisibility(View.VISIBLE);
 
         productAdapter.setMultipleChoise(false);
     }
@@ -413,4 +415,16 @@ public class MainActivity extends BaseActivity {
             startActivity(accountIntent);
         }
     };
+
+    public View getViewByPosition(int pos) {
+        final int firstListItemPosition = productList.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + productList.getChildCount() - 1;
+
+        if (pos < firstListItemPosition || pos > lastListItemPosition) {
+            return  productList.getAdapter().getView(pos, null, productList);
+        } else {
+            final int childIndex = pos - firstListItemPosition;
+            return productList.getChildAt(childIndex);
+        }
+    }
 }
