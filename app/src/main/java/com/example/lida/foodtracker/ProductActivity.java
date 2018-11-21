@@ -95,18 +95,15 @@ public class ProductActivity extends AppCompatActivity {
 
                     } else {
                         Log.d(TAG, "response body is empty. Setting default image");
-                        productImage.setImageResource(R.drawable.carrot);
                     }
                 } else {
                     Log.d(TAG, "reesponseCode is not successful. Setting default image");
-                    productImage.setImageResource(R.drawable.carrot);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "Resposne Failed. Setting default image");
-                productImage.setImageResource(R.drawable.carrot);
             }
         });
     }
